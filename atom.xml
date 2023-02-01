@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://example.com</id>
+    <id>https://www.zhouxiaozhao.cn</id>
     <title>小钊の笔记</title>
     <subtitle>前天是小兔子，昨天是小鹿，今天是你</subtitle>
-    <icon>http://example.com/images/favicon.ico</icon>
-    <link href="http://example.com" />
+    <icon>https://www.zhouxiaozhao.cn/images/favicon.ico</icon>
+    <link href="https://www.zhouxiaozhao.cn" />
     <author>
       <name>amane</name>
     </author>
     <updated>2022-12-14T16:00:00.000Z</updated>
     <category term="zhoushizhao" />
     <entry>
-        <id>http://example.com/2022/12/15/2022-12-15-GO/</id>
+        <id>https://www.zhouxiaozhao.cn/2022/12/15/2022-12-15-GO/</id>
         <title>比较基因组学分析3：特异节点基因家族富集分析（非模式物种GO/KEEG库构建）</title>
-        <link rel="alternate" href="http://example.com/2022/12/15/2022-12-15-GO/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2022/12/15/2022-12-15-GO/"/>
         <content type="html">&lt;h1 id=&#34;1前言&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#1前言&#34;&gt;#&lt;/a&gt; 1. 前言&lt;/h1&gt;
 &lt;p&gt;上次讲到基因家族的收缩扩张分析，这次我们以某个节点为切入点，进行特异节点的功能富集分析&lt;br&gt;
 其实这篇教程适用于所有的非模式物种 (没有现成的 GO/KEGG 库的物种) 的富集分析&lt;br&gt;
@@ -311,16 +311,16 @@ ggsave(plot,filename = &amp;quot;node25KEGG.png&amp;quot;,width = 210,height = 2
 &lt;h1 id=&#34;总结&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#总结&#34;&gt;#&lt;/a&gt; 总结&lt;/h1&gt;
 &lt;p&gt;== 比较基因组学分析的基本内容已经介绍完了，如果说有遗漏的内容那应该就是加倍化事件，由于本次使用的数据集跨度过大所以没有增加 WGD 的分析，大家有什么问题欢迎交流 ==&lt;/p&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="基因组" scheme="http://example.com/categories/Bioinformation/genome/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="Comparative_Genomics" scheme="http://example.com/tags/Comparative-Genomics/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="基因组" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/genome/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="Comparative_Genomics" scheme="https://www.zhouxiaozhao.cn/tags/Comparative-Genomics/" />
         <updated>2022-12-14T16:00:00.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2022/12/14/2022-12-14-CAFE/</id>
+        <id>https://www.zhouxiaozhao.cn/2022/12/14/2022-12-14-CAFE/</id>
         <title>比较基因组学分析2：基因家族收缩与扩张分析</title>
-        <link rel="alternate" href="http://example.com/2022/12/14/2022-12-14-CAFE/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2022/12/14/2022-12-14-CAFE/"/>
         <content type="html">&lt;h1 id=&#34;前言&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h1&gt;
 &lt;h2 id=&#34;上篇推文中介绍到比较基因组学分析常用套路的第一步利用单拷贝基因构建具有分化时间的物种树补充一点对于跨度较大的物种可以选择单拷贝基因的方法比如此次分析使用的物种-对于目级或者科级水平来讲推荐使用共线性基因建树-以十字花科为例如果用单拷贝基因可能只有1000多组但是使用共线性可能有接近5000组-共线性基因建树可以使用wgdi的方法这部分内容我以后会探索一下-sun-et-al-2022-wgdi本篇推文主要讲基因家族的收缩与扩张分析使用的软件是cafe52020年发表相较于cafe4来讲操作更加方便并且新增了模型gamma&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#上篇推文中介绍到比较基因组学分析常用套路的第一步利用单拷贝基因构建具有分化时间的物种树补充一点对于跨度较大的物种可以选择单拷贝基因的方法比如此次分析使用的物种-对于目级或者科级水平来讲推荐使用共线性基因建树-以十字花科为例如果用单拷贝基因可能只有1000多组但是使用共线性可能有接近5000组-共线性基因建树可以使用wgdi的方法这部分内容我以后会探索一下-sun-et-al-2022-wgdi本篇推文主要讲基因家族的收缩与扩张分析使用的软件是cafe52020年发表相较于cafe4来讲操作更加方便并且新增了模型gamma&#34;&gt;#&lt;/a&gt; 上篇推文中介绍到比较基因组学分析常用套路的第一步，利用单拷贝基因构建具有分化时间的物种树，补充一点，&lt;span class=&#34;pink&#34;&gt;对于跨度较大的物种，可以选择单拷贝基因的方法，比如此次分析使用的物种。对于目级或者科级水平来讲，推荐使用共线性基因建树。以十字花科为例，如果用单拷贝基因，可能只有 1000 多组，但是使用共线性可能有接近 5000 组。&lt;/span&gt;共线性基因建树可以使用 WGDI 的方法，这部分内容我以后会探索一下。&lt;br&gt;
 &lt;img data-src=&#34;/img/posts/2022.12.14/1.png&#34; alt=&#34;Sun et al 2022 WGDI&#34;&gt;&lt;br&gt;
@@ -580,16 +580,16 @@ grep -f node0significant.expand Orthogroups.txt |sed &amp;quot;s/ /\n/g&amp;quot
 &lt;p&gt;总体来说，个人感觉 CAFE5 要比 CAFE4 方便很多，但是输出结果的可视化方面还需要加强，下一篇推文将简单实践某个节点的基因功能富集分析 (GO/KEGG), 类似于分析下图的红色节点。&lt;br&gt;
 &lt;img data-src=&#34;/img/posts/2022.12.14/5.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="基因组" scheme="http://example.com/categories/Bioinformation/genome/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="Comparative_Genomics" scheme="http://example.com/tags/Comparative-Genomics/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="基因组" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/genome/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="Comparative_Genomics" scheme="https://www.zhouxiaozhao.cn/tags/Comparative-Genomics/" />
         <updated>2022-12-13T16:00:00.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2022/12/08/2022-12-08-SingleCopy/</id>
+        <id>https://www.zhouxiaozhao.cn/2022/12/08/2022-12-08-SingleCopy/</id>
         <title>比较基因组学分析1：构建单拷贝基因树</title>
-        <link rel="alternate" href="http://example.com/2022/12/08/2022-12-08-SingleCopy/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2022/12/08/2022-12-08-SingleCopy/"/>
         <content type="html">&lt;h1 id=&#34;前言&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#前言&#34;&gt;#&lt;/a&gt; 前言&lt;/h1&gt;
 &lt;p&gt;之前有写过&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMDcvMTgvMjAyMC0wNy0xOC1vcnRob2ZpbmRlci8=&#34;&gt;单拷贝基因构建物种树&lt;/span&gt;的流程，现在我对流程进行优化，而且将会增加后续的基因家族收缩与扩张分析，希望对大家的分析有所帮助&lt;/p&gt;
 &lt;h1 id=&#34;物种选择&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#物种选择&#34;&gt;#&lt;/a&gt; 物种选择&lt;/h1&gt;
@@ -777,16 +777,16 @@ cp out.BV ../02.Time/rep2/in.BV
 &lt;img data-src=&#34;/img/posts/2022.12.8/3.png&#34; alt=&#34;分化时间&#34;&gt;&lt;/p&gt;
 &lt;p&gt;之后可以进行基因家族的收缩与扩张分析了，这部分之后在写&lt;/p&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="基因组" scheme="http://example.com/categories/Bioinformation/genome/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="Comparative_Genomics" scheme="http://example.com/tags/Comparative-Genomics/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="基因组" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/genome/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="Comparative_Genomics" scheme="https://www.zhouxiaozhao.cn/tags/Comparative-Genomics/" />
         <updated>2022-12-07T16:00:00.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2021/01/12/2021-01-12-RNAseq(21)/</id>
+        <id>https://www.zhouxiaozhao.cn/2021/01/12/2021-01-12-RNAseq(21)/</id>
         <title>RNAseq教程(5)</title>
-        <link rel="alternate" href="http://example.com/2021/01/12/2021-01-12-RNAseq(21)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2021/01/12/2021-01-12-RNAseq(21)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -887,15 +887,15 @@ wt_SRR1582651_1.fastq
 wt_SRR1582651_2.fastq
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2021-01-12T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2021/01/09/2021-01-09-RNAseq(20)/</id>
+        <id>https://www.zhouxiaozhao.cn/2021/01/09/2021-01-09-RNAseq(20)/</id>
         <title>RNAseq教程(4.5)</title>
-        <link rel="alternate" href="http://example.com/2021/01/09/2021-01-09-RNAseq(20)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2021/01/09/2021-01-09-RNAseq(20)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -1001,15 +1001,15 @@ grep -P -w &amp;quot;NDA|A|D&amp;quot; UHR.junctions.anno.bed | perl -ne &#39;ch
 perl stringtie_filter_gtf.pl --expression_metric=FPKM --result_dirs=&#39;HBR_Rep1,HBR_Rep2,HBR_Rep3,UHR_Rep1,UHR_Rep2,UHR_Rep3&#39; --input_gtf_file=&#39;../chr22_with_ERCC92.gtf&#39; --filtered_gtf_file=&#39;chr22_with_ERCC92.filtered.gtf&#39; --exp_cutoff=0 --min_sample_count=2
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2021-01-09T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2021/01/07/2021-01-07-RNAseq(19)/</id>
+        <id>https://www.zhouxiaozhao.cn/2021/01/07/2021-01-07-RNAseq(19)/</id>
         <title>RNAseq教程(4.4)</title>
-        <link rel="alternate" href="http://example.com/2021/01/07/2021-01-07-RNAseq(19)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2021/01/07/2021-01-07-RNAseq(19)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -1090,15 +1090,15 @@ stringtie -p 8 -G ../de_novo/stringtie_merged.gtf -e -B -o UHR_Rep3/transcripts.
 &lt;pre&gt;&lt;code&gt;printf &amp;quot;\&amp;quot;ids\&amp;quot;,\&amp;quot;type\&amp;quot;,\&amp;quot;path\&amp;quot;\n\&amp;quot;UHR_Rep1\&amp;quot;,\&amp;quot;UHR\&amp;quot;,\&amp;quot;$RNA_HOME/expression/stringtie/de_novo_merged/UHR_Rep1\&amp;quot;\n\&amp;quot;UHR_Rep2\&amp;quot;,\&amp;quot;UHR\&amp;quot;,\&amp;quot;$RNA_HOME/expression/stringtie/de_novo_merged/UHR_Rep2\&amp;quot;\n\&amp;quot;UHR_Rep3\&amp;quot;,\&amp;quot;UHR\&amp;quot;,\&amp;quot;$RNA_HOME/expression/stringtie/de_novo_merged/UHR_Rep3\&amp;quot;\n\&amp;quot;HBR_Rep1\&amp;quot;,\&amp;quot;HBR\&amp;quot;,\&amp;quot;$RNA_HOME/expression/stringtie/de_novo_merged/HBR_Rep1\&amp;quot;\n\&amp;quot;HBR_Rep2\&amp;quot;,\&amp;quot;HBR\&amp;quot;,\&amp;quot;$RNA_HOME/expression/stringtie/de_novo_merged/HBR_Rep2\&amp;quot;\n\&amp;quot;HBR_Rep3\&amp;quot;,\&amp;quot;HBR\&amp;quot;,\&amp;quot;$RNA_HOME/expression/stringtie/de_novo_merged/HBR_Rep3\&amp;quot;\n&amp;quot; &amp;gt; UHR_vs_HBR.csv
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2021-01-07T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2021/01/05/2021-01-05-RNAseq(18)/</id>
+        <id>https://www.zhouxiaozhao.cn/2021/01/05/2021-01-05-RNAseq(18)/</id>
         <title>RNAseq教程(4.3)</title>
-        <link rel="alternate" href="http://example.com/2021/01/05/2021-01-05-RNAseq(18)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2021/01/05/2021-01-05-RNAseq(18)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -1184,15 +1184,15 @@ stringtie --merge -p 8 -o stringtie_merged.gtf assembly_GTF_list.txt
 cat gffcompare.stats
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2021-01-05T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2021/01/02/2021-01-02-RNAseq(17)/</id>
+        <id>https://www.zhouxiaozhao.cn/2021/01/02/2021-01-02-RNAseq(17)/</id>
         <title>RNAseq教程(4.2)</title>
-        <link rel="alternate" href="http://example.com/2021/01/02/2021-01-02-RNAseq(17)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2021/01/02/2021-01-02-RNAseq(17)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -1248,15 +1248,15 @@ stringtie -p 8 -l HBR_Rep1 -o denovo/HBR_Rep1/transcripts.gtf HBR_Rep1.bam
 后续处理相同
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2021-01-02T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/31/2020-12-31-RNAseq(16)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/31/2020-12-31-RNAseq(16)/</id>
         <title>RNAseq教程(4.1)</title>
-        <link rel="alternate" href="http://example.com/2020/12/31/2020-12-31-RNAseq(16)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/31/2020-12-31-RNAseq(16)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -1321,15 +1321,15 @@ stringtie -p 1 -G ../chr22_with_ERCC92.gtf -l HBR_Rep1 -o ref_guided/HBR_Rep1/tr
 所有做相同处理
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-31T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/29/2020-12-29-RNAseq(15)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/29/2020-12-29-RNAseq(15)/</id>
         <title>RNAseq教程(3.4)</title>
-        <link rel="alternate" href="http://example.com/2020/12/29/2020-12-29-RNAseq(15)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/29/2020-12-29-RNAseq(15)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -1413,15 +1413,15 @@ rm -f header.tsv
 tail transcript_tpms_all_samples.tsv
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-29T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/26/2020-12-26-RNAseq(14)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/26/2020-12-26-RNAseq(14)/</id>
         <title>RNAseq教程(3.3)</title>
-        <link rel="alternate" href="http://example.com/2020/12/26/2020-12-26-RNAseq(14)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/26/2020-12-26-RNAseq(14)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -1834,15 +1834,15 @@ quit(save=&amp;quot;no&amp;quot;)
 &lt;p&gt;&lt;img data-src=&#34;/img/posts/2020.12.26/image-20210105164626539.png&#34; alt=&#34;image-20210105164626539&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img data-src=&#34;/img/posts/2020.12.26/image-20210105164645781.png&#34; alt=&#34;image-20210105164645781&#34;&gt;&lt;/p&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-26T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/24/2020-12-24-RNAseq(13)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/24/2020-12-24-RNAseq(13)/</id>
         <title>RNAseq教程(3.2)</title>
-        <link rel="alternate" href="http://example.com/2020/12/24/2020-12-24-RNAseq(13)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/24/2020-12-24-RNAseq(13)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2083,15 +2083,15 @@ cat /de/htseq_counts/DE_genes.txt
 cut -f 2 de/htseq_counts/DE_genes.txt | sort &amp;gt; htseq_counts_edgeR_DE_gene_symbols.txt
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-24T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/22/2020-12-22-RNAseq(12)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/22/2020-12-22-RNAseq(12)/</id>
         <title>RNAseq教程(3.1)</title>
-        <link rel="alternate" href="http://example.com/2020/12/22/2020-12-22-RNAseq(12)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/22/2020-12-22-RNAseq(12)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2221,15 +2221,15 @@ rm -f gene_read_counts_table_all.tsv header.txt
 head gene_read_counts_table_all_final.tsv
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-22T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/19/2020-12-19-RNAseq(11)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/19/2020-12-19-RNAseq(11)/</id>
         <title>RNAseq教程(2.5)</title>
-        <link rel="alternate" href="http://example.com/2020/12/19/2020-12-19-RNAseq(11)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/19/2020-12-19-RNAseq(11)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2320,15 +2320,15 @@ samtools flagstat HBR.bam
 &lt;h3 id=&#34;using-fastqc&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#using-fastqc&#34;&gt;#&lt;/a&gt; Using FastQC&lt;/h3&gt;
 &lt;p&gt;你可以使用 FastQC 来执行基本的 BAM 文件的 QC (&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDgvUk5Bc2VxKDYpLw==&#34;&gt;Pre-Alignment QC&lt;/span&gt;)。输出非常类似于在 fastq 文件上运行 FastQC。&lt;/p&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-19T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/17/2020-12-17-RNAseq(10)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/17/2020-12-17-RNAseq(10)/</id>
         <title>RNAseq教程(2.4)</title>
-        <link rel="alternate" href="http://example.com/2020/12/17/2020-12-17-RNAseq(10)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/17/2020-12-17-RNAseq(10)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2414,15 +2414,15 @@ cat HBR_bam-readcounts.txt | perl -ne &#39;@data=split(&amp;quot;\t&amp;quot;, $
 HBR Counts	22	38483683	A: 75	C: 0	T: 0	G: 131
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-17T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/15/2020-12-15-RNAseq(9)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/15/2020-12-15-RNAseq(9)/</id>
         <title>RNAseq教程(2.3)</title>
-        <link rel="alternate" href="http://example.com/2020/12/15/2020-12-15-RNAseq(9)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/15/2020-12-15-RNAseq(9)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2605,15 +2605,15 @@ HBR Counts	22	38483683	A: 75	C: 0	T: 0	G: 131
 &lt;li&gt;Attribute file: &lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2dyaWZmaXRobGFiL3JuYXNlcV90dXRvcmlhbC9tYXN0ZXIvc2NyaXB0cy9JZ3ZfSENDMTE0M19hdHRyaWJ1dGVzLnR4dA==&#34;&gt;Igv_HCC1143_attributes.txt&lt;/span&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-15T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/12/2020-12-12-RNAseq(8)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/12/2020-12-12-RNAseq(8)/</id>
         <title>RNAseq教程(2.2)</title>
-        <link rel="alternate" href="http://example.com/2020/12/12/2020-12-12-RNAseq(8)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/12/2020-12-12-RNAseq(8)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2747,15 +2747,15 @@ HBR_Rep1.bam  HBR_Rep3.bam  UHR_Rep1.bam  UHR_Rep3.bam
 &lt;pre&gt;&lt;code&gt;samtools view -H HCC1395_normal.bam
 &lt;/code&gt;&lt;/pre&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-12T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/10/2020-12-10-RNAseq(7)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/10/2020-12-10-RNAseq(7)/</id>
         <title>RNAseq教程(2.1)</title>
-        <link rel="alternate" href="http://example.com/2020/12/10/2020-12-10-RNAseq(7)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/10/2020-12-10-RNAseq(7)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2854,15 +2854,15 @@ flexbar --adapter-min-overlap 7 --adapter-trim-end RIGHT --adapters illumina_mul
 &lt;p&gt;在 “Per base sequence content section” 部分，你看到了什么模式？什么可以解释这种模式呢？&lt;/p&gt;
 &lt;p&gt;前 9 个碱基位置显示出一个尖状的模式，表明每个碱基在我们的读取 / 片段的开头有偏倚的表示。一种可能的解释是，cDNA 合成的随机六聚体引物在文库准备过程中以非随机的方式产生。因此碎片的生成 (以及最终的 reads) 在开始时有一个非随机模式。&lt;/p&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-10T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/08/2020-12-08-RNAseq(6)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/08/2020-12-08-RNAseq(6)/</id>
         <title>RNAseq教程(1.6)</title>
-        <link rel="alternate" href="http://example.com/2020/12/08/2020-12-08-RNAseq(6)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/08/2020-12-08-RNAseq(6)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2925,15 +2925,15 @@ flexbar --adapter-min-overlap 7 --adapter-trim-end RIGHT --adapters illumina_mul
 &lt;p&gt;What is the most common average sequence quality score? 41&lt;/p&gt;
 &lt;p&gt;What does the Adaptor Content warning tell us? 有一些证据表明，Illumina 接头在 reads 的 3&#39; 端。这表明去除对于该数据来说可能是必须的。&lt;/p&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-08T10:38:45.000Z</updated>
     </entry>
     <entry>
-        <id>http://example.com/2020/12/05/2020-12-05-RNAseq(5)/</id>
+        <id>https://www.zhouxiaozhao.cn/2020/12/05/2020-12-05-RNAseq(5)/</id>
         <title>RNAseq教程(1.5)</title>
-        <link rel="alternate" href="http://example.com/2020/12/05/2020-12-05-RNAseq(5)/"/>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/05/2020-12-05-RNAseq(5)/"/>
         <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2976,9 +2976,9 @@ flexbar --adapter-min-overlap 7 --adapter-trim-end RIGHT --adapters illumina_mul
 &lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMTQvUk5Bc2VxKDIyKS8=&#34;&gt;Functional Annotation of Assembled Transcripts Using Trinotate&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </content>
-        <category term="生信学习" scheme="http://example.com/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="http://example.com/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="http://example.com/tags/RNAseq/" />
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-05T10:38:45.000Z</updated>
     </entry>
 </feed>
