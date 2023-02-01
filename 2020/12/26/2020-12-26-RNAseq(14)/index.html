@@ -1,0 +1,361 @@
+<!-- build time:Wed Feb 01 2023 11:29:46 GMT+0800 (中国标准时间) --><!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#FFF"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"><link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="alternate" type="application/rss+xml" title="小钊の笔记" href="http://example.com/rss.xml"><link rel="alternate" type="application/atom+xml" title="小钊の笔记" href="http://example.com/atom.xml"><link rel="alternate" type="application/json" title="小钊の笔记" href="http://example.com/feed.json"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext"><link rel="stylesheet" href="/css/app.css?v=0.2.5"><meta name="keywords" content="bioinformatics,RNAseq"><link rel="canonical" href="http://example.com/2020/12/26/2020-12-26-RNAseq(14)/"><title>RNAseq 教程 (3.3) - 生信学习 | Zhou Xiaozhao = 小钊の笔记 = 前天是小兔子，昨天是小鹿，今天是你</title><meta name="generator" content="Hexo 5.4.1"></head><body itemscope itemtype="http://schema.org/WebPage"><div id="loading"><div class="cat"><div class="body"></div><div class="head"><div class="face"></div></div><div class="foot"><div class="tummy-end"></div><div class="bottom"></div><div class="legs left"></div><div class="legs right"></div></div><div class="paw"><div class="hands left"></div><div class="hands right"></div></div></div></div><div id="container"><header id="header" itemscope itemtype="http://schema.org/WPHeader"><div class="inner"><div id="brand"><div class="pjax"><h1 itemprop="name headline">RNAseq 教程 (3.3)</h1><div class="meta"><span class="item" title="创建时间：2020-12-26 18:38:45"><span class="icon"><i class="ic i-calendar"></i> </span><span class="text">发表于</span> <time itemprop="dateCreated datePublished" datetime="2020-12-26T18:38:45+08:00">2020-12-26</time> </span><span class="item" title="本文字数"><span class="icon"><i class="ic i-pen"></i> </span><span class="text">本文字数</span> <span>17k</span> <span class="text">字</span> </span><span class="item" title="阅读时长"><span class="icon"><i class="ic i-clock"></i> </span><span class="text">阅读时长</span> <span>16 分钟</span></span></div></div></div><nav id="nav"><div class="inner"><div class="toggle"><div class="lines" aria-label="切换导航栏"><span class="line"></span> <span class="line"></span> <span class="line"></span></div></div><ul class="menu"><li class="item title"><a href="/" rel="start">Zhou Xiaozhao</a></li></ul><ul class="right"><li class="item theme"><i class="ic i-sun"></i></li><li class="item search"><i class="ic i-search"></i></li></ul></div></nav></div><div id="imgs" class="pjax"><ul><li class="item" data-background-image="https://img1.imgtp.com/2022/12/19/QROEkuDG.jpg"></li><li class="item" data-background-image="https://img1.imgtp.com/2022/12/19/avrU4QNf.jpg"></li><li class="item" data-background-image="https://img1.imgtp.com/2022/12/19/dozjFy4z.jpg"></li><li class="item" data-background-image="https://img1.imgtp.com/2022/12/19/VKVhuejA.jpg"></li><li class="item" data-background-image="https://img1.imgtp.com/2022/12/19/Nrf0iL26.jpg"></li><li class="item" data-background-image="https://img1.imgtp.com/2022/12/19/D1Ki65lN.jpg"></li></ul></div></header><div id="waves"><svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs><g class="parallax"><use xlink:href="#gentle-wave" x="48" y="0"/><use xlink:href="#gentle-wave" x="48" y="3"/><use xlink:href="#gentle-wave" x="48" y="5"/><use xlink:href="#gentle-wave" x="48" y="7"/></g></svg></div><main><div class="inner"><div id="main" class="pjax"><div class="article wrap"><div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList"><i class="ic i-home"></i> <span><a href="/">首页</a></span><i class="ic i-angle-right"></i> <span class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/Bioinformation/" itemprop="item" rel="index" title="分类于 生信学习"><span itemprop="name">生信学习</span></a><meta itemprop="position" content="1"></span></div><article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN"><link itemprop="mainEntityOfPage" href="http://example.com/2020/12/26/2020-12-26-RNAseq(14)/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/images/avatar.png"><meta itemprop="name" content="kuchi Shū"><meta itemprop="description" content="前天是小兔子，昨天是小鹿，今天是你, 生物学在读博士"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="小钊の笔记"></span><div class="body md" itemprop="articleBody"><h2 id="目录"><a class="anchor" href="#目录">#</a> 目录</h2><p><strong>1.Module 1 - Introduction to RNA sequencing</strong></p><ol><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTEvMTcvUk5Bc2VxKDEpLw==">Installation</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTEvMjgvUk5Bc2VxKDIpLw==">Reference Genomes</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDEvUk5Bc2VxKDMpLw==">Annotations</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDMvUk5Bc2VxKDQpLw==">Indexing</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDUvUk5Bc2VxKDUpLw==">RNA-seq Data</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDgvUk5Bc2VxKDYpLw==">Pre-Alignment QC</span></li></ol><p><strong>2.Module 2 - RNA-seq Alignment and Visualization</strong></p><ol><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTAvUk5Bc2VxKDcpLw==">Adapter Trim</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTIvUk5Bc2VxKDgpLw==">Alignment</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTUvUk5Bc2VxKDkpLw==">IGV</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTcvUk5Bc2VxKDEwKS8=">Alignment Visualization</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTkvUk5Bc2VxKDExKS8=">Alignment QC</span></li></ol><p><strong>3.Module 3 - Expression and Differential Expression</strong></p><ol><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjIvUk5Bc2VxKDEyKS8=">Expression</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjQvUk5Bc2VxKDEzKS8=">Differential Expression</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjYvUk5Bc2VxKDE0KS8=">DE Visualization</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjkvUk5Bc2VxKDE1KS8=">Kallisto for Reference-Free Abundance Estimation</span></li></ol><p><strong>4.Module 4 - Isoform Discovery and Alternative Expression</strong></p><ol><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMzEvUk5Bc2VxKDE2KS8=">Reference Guided Transcript Assembly</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDIvUk5Bc2VxKDE3KS8=">de novo Transcript Assembly</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDUvUk5Bc2VxKDE4KS8=">Transcript Assembly Merge</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDcvUk5Bc2VxKDE5KS8=">Differential Splicing</span></li><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDkvUk5Bc2VxKDIwKS8=">Splicing Visualization</span></li></ol><p><strong>5.Module 5 - De novo transcript reconstruction</strong></p><ol><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMTIvUk5Bc2VxKDIxKS8=">De novo RNA-Seq Assembly and Analysis Using Trinity</span></li></ol><p><strong>6.Module 6 - Functional Annotation of Transcripts</strong></p><ol><li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMTQvUk5Bc2VxKDIyKS8=">Functional Annotation of Assembled Transcripts Using Trinotate</span></li></ol><h2 id="33-de-visualization"><a class="anchor" href="#33-de-visualization">#</a> 3.3 DE Visualization</h2><p>在正确的目录（之前的 UHR_vs_HBR.csv），然后启动 R:</p><pre><code class="language-R"># Load libraries needed for this analysis
+library(ballgown)
+library(genefilter)
+library(dplyr)
+library(devtools)
+
+# Define a path for the output PDF to be written
+outfile=&quot;~/workspace/rnaseq/de/ballgown/ref_only/Tutorial_Part2_ballgown_output.pdf&quot;
+
+# Load phenotype data
+pheno_data = read.csv(&quot;UHR_vs_HBR.csv&quot;)
+
+# Display the phenotype data
+pheno_data
+
+# Load the ballgown object from file
+load('bg.rda')
+
+# The load command, loads an R object from a file into memory in our R session.
+# You can use ls() to view the names of variables that have been loaded
+ls()
+
+# Print a summary of the ballgown object
+bg
+
+# Open a PDF file where we will save some plots. We will save all figures and then view the PDF at the end
+pdf(file=outfile)
+
+# Extract FPKM values from the 'bg' object
+fpkm = texpr(bg,meas=&quot;FPKM&quot;)
+
+# View the last several rows of the FPKM table
+tail(fpkm)
+
+# Transform the FPKM values by adding 1 and convert to a log2 scale
+fpkm = log2(fpkm+1)
+
+# View the last several rows of the transformed FPKM table
+tail(fpkm)
+
+# Create boxplots to display summary statistics for the FPKM values for each sample
+boxplot(fpkm,col=as.numeric(pheno_data$type)+1,las=2,ylab='log2(FPKM+1)')
+
+# Display the transcript ID for a single row of data
+ballgown::transcriptNames(bg)[2763]
+
+# Display the gene name for a single row of data
+ballgown::geneNames(bg)[2763]
+
+# Create a BoxPlot comparing the expression of a single gene for all replicates of both conditions
+plot(fpkm[2763,] ~ pheno_data$type, border=c(2,3), main=paste(ballgown::geneNames(bg)[2763],' : ', ballgown::transcriptNames(bg)[2763]),pch=19, xlab=&quot;Type&quot;, ylab='log2(FPKM+1)')
+
+# Add the FPKM values for each sample onto the plot
+points(fpkm[2763,] ~ jitter(as.numeric(pheno_data$type)), col=as.numeric(pheno_data$type)+1, pch=16)
+
+# Create a plot of transcript structures observed in each replicate and color transcripts by expression level
+plotTranscripts(ballgown::geneIDs(bg)[2763], bg, main=c('Gene in sample HBR_Rep1'), sample=c('HBR_Rep1'))
+plotTranscripts(ballgown::geneIDs(bg)[2763], bg, main=c('Gene in sample HBR_Rep2'), sample=c('HBR_Rep2'))
+plotTranscripts(ballgown::geneIDs(bg)[2763], bg, main=c('Gene in sample HBR_Rep3'), sample=c('HBR_Rep3'))
+plotTranscripts(ballgown::geneIDs(bg)[2763], bg, main=c('Gene in sample UHR_Rep1'), sample=c('UHR_Rep1'))
+plotTranscripts(ballgown::geneIDs(bg)[2763], bg, main=c('Gene in sample UHR_Rep2'), sample=c('UHR_Rep2'))
+plotTranscripts(ballgown::geneIDs(bg)[2763], bg, main=c('Gene in sample UHR_Rep3'), sample=c('UHR_Rep3'))
+
+#plotMeans('TST',bg,groupvar=&quot;type&quot;,legend=FALSE)
+
+# Close the PDF device where we have been saving our plots
+dev.off()
+
+# Exit the R session
+quit(save=&quot;no&quot;)
+</code></pre><p>查看一下输出的 pdf 文件</p><p><img data-src="/img/posts/2020.12.26/image-20210105164226503.png" alt="image-20210105164226503"></p><h3 id="额外分析"><a class="anchor" href="#额外分析">#</a> 额外分析</h3><p>运行 R 脚本</p><pre><code>#Tutorial_Part3_Supplementary_R.R
+
+#Malachi Griffith, mgriffit[AT]wustl.edu
+#Obi Griffith, obigriffith[AT]wustl.edu
+#Jason Walker, jason.walker[AT]wustl.edu
+#McDonnell Genome Institute, Washington University School of Medicine
+
+#R tutorial for Informatics for RNA-sequence Analysis workshops
+
+#Starting from the output of the RNA-seq Tutorial Part 1.
+
+#Load libraries
+library(ggplot2)
+library(gplots)
+library(GenomicRanges)
+library(ballgown)
+
+#If X11 not available, open a pdf device for output of all plots
+pdf(file=&quot;Tutorial_Part3_Supplementary_R_output.pdf&quot;)
+
+#### Import the gene expression data from the HISAT2/StringTie/Ballgown tutorial
+
+#Set working directory where results files exist
+working_dir = &quot;~/workspace/rnaseq/de/ballgown/ref_only&quot;
+setwd(working_dir)
+
+# List the current contents of this directory
+dir()
+
+#Import expression and differential expression results from the HISAT2/StringTie/Ballgown pipeline
+load('bg.rda')
+
+# View a summary of the ballgown object
+bg
+
+# Load gene names for lookup later in the tutorial
+bg_table = texpr(bg, 'all')
+bg_gene_names = unique(bg_table[, 9:10])
+
+# Pull the gene_expression data frame from the ballgown object
+gene_expression = as.data.frame(gexpr(bg))
+
+#### Working with 'dataframes'
+#View the first five rows of data (all columns) in one of the dataframes created
+head(gene_expression)
+
+#View the column names
+colnames(gene_expression)
+
+#View the row names
+row.names(gene_expression)
+
+#Determine the dimensions of the dataframe.  'dim()' will return the number of rows and columns
+dim(gene_expression)
+
+#Get the first 3 rows of data and a selection of columns
+gene_expression[1:3,c(1:3,6)]
+
+#Do the same thing, but using the column names instead of numbers
+gene_expression[1:3, c(&quot;FPKM.UHR_Rep1&quot;,&quot;FPKM.UHR_Rep2&quot;,&quot;FPKM.UHR_Rep3&quot;,&quot;FPKM.HBR_Rep3&quot;)]
+
+#Assign colors to each.  You can specify color by RGB, Hex code, or name
+#To get a list of color names:
+colours()
+data_colors=c(&quot;tomato1&quot;,&quot;tomato2&quot;,&quot;tomato3&quot;,&quot;royalblue1&quot;,&quot;royalblue2&quot;,&quot;royalblue3&quot;)
+
+#View expression values for the transcripts of a particular gene symbol of chromosome 22.  e.g. 'TST'
+#First determine the rows in the data.frame that match 'TST', aka. ENSG00000128311, then display only those rows of the data.frame
+i = row.names(gene_expression) == &quot;ENSG00000128311&quot;
+gene_expression[i,]
+
+#What if we want to view values for a list of genes of interest all at once?
+#genes_of_interest = c(&quot;TST&quot;, &quot;MMP11&quot;, &quot;LGALS2&quot;, &quot;ISX&quot;)
+genes_of_interest = c(&quot;ENSG00000128311&quot;,&quot;ENSG00000099953&quot;,&quot;ENSG00000100079&quot;,&quot;ENSG00000175329&quot;)
+i = which(row.names(gene_expression) %in% genes_of_interest)
+gene_expression[i,]
+
+# Load the transcript to gene index from the ballgown object
+transcript_gene_table = indexes(bg)$t2g
+head(transcript_gene_table)
+
+#Each row of data represents a transcript. Many of these transcripts represent the same gene. Determine the numbers of transcripts and unique genes  
+length(row.names(transcript_gene_table)) #Transcript count
+length(unique(transcript_gene_table[,&quot;g_id&quot;])) #Unique Gene count
+
+#### Plot #1 - the number of transcripts per gene.  
+#Many genes will have only 1 transcript, some genes will have several transcripts
+#Use the 'table()' command to count the number of times each gene symbol occurs (i.e. the # of transcripts that have each gene symbol)
+#Then use the 'hist' command to create a histogram of these counts
+#How many genes have 1 transcript?  More than one transcript?  What is the maximum number of transcripts for a single gene?
+counts=table(transcript_gene_table[,&quot;g_id&quot;])
+c_one = length(which(counts == 1))
+c_more_than_one = length(which(counts &gt; 1))
+c_max = max(counts)
+hist(counts, breaks=50, col=&quot;bisque4&quot;, xlab=&quot;Transcripts per gene&quot;, main=&quot;Distribution of transcript count per gene&quot;)
+legend_text = c(paste(&quot;Genes with one transcript =&quot;, c_one), paste(&quot;Genes with more than one transcript =&quot;, c_more_than_one), paste(&quot;Max transcripts for single gene = &quot;, c_max))
+legend(&quot;topright&quot;, legend_text, lty=NULL)
+
+
+#### Plot #2 - the distribution of transcript sizes as a histogram
+#In this analysis we supplied StringTie with transcript models so the lengths will be those of known transcripts
+#However, if we had used a de novo transcript discovery mode, this step would give us some idea of how well transcripts were being assembled
+#If we had a low coverage library, or other problems, we might get short 'transcripts' that are actually only pieces of real transcripts
+
+full_table &lt;- texpr(bg , 'all')
+hist(full_table$length, breaks=50, xlab=&quot;Transcript length (bp)&quot;, main=&quot;Distribution of transcript lengths&quot;, col=&quot;steelblue&quot;)
+
+#### Summarize FPKM values for all 6 replicates
+#What are the minimum and maximum FPKM values for a particular library?
+min(gene_expression[,&quot;FPKM.UHR_Rep1&quot;])
+max(gene_expression[,&quot;FPKM.UHR_Rep1&quot;])
+
+#Set the minimum non-zero FPKM values for use later.
+#Do this by grabbing a copy of all data values, coverting 0's to NA, and calculating the minimum or all non NA values
+#zz = fpkm_matrix[,data_columns]
+#zz[zz==0] = NA
+#min_nonzero = min(zz, na.rm=TRUE)
+#min_nonzero
+
+#Alternatively just set min value to 1
+min_nonzero=1
+
+# Set the columns for finding FPKM and create shorter names for figures
+data_columns=c(1:6)
+short_names=c(&quot;UHR_1&quot;,&quot;UHR_2&quot;,&quot;UHR_3&quot;,&quot;HBR_1&quot;,&quot;HBR_2&quot;,&quot;HBR_3&quot;)
+
+#### Plot #3 - View the range of values and general distribution of FPKM values for all 4 libraries
+#Create boxplots for this purpose
+#Display on a log2 scale and add the minimum non-zero value to avoid log2(0)
+boxplot(log2(gene_expression[,data_columns]+min_nonzero), col=data_colors, names=short_names, las=2, ylab=&quot;log2(FPKM)&quot;, main=&quot;Distribution of FPKMs for all 6 libraries&quot;)
+#Note that the bold horizontal line on each boxplot is the median
+
+#### Plot #4 - plot a pair of replicates to assess reproducibility of technical replicates
+#Tranform the data by converting to log2 scale after adding an arbitrary small value to avoid log2(0)
+x = gene_expression[,&quot;FPKM.UHR_Rep1&quot;]
+y = gene_expression[,&quot;FPKM.UHR_Rep2&quot;]
+plot(x=log2(x+min_nonzero), y=log2(y+min_nonzero), pch=16, col=&quot;blue&quot;, cex=0.25, xlab=&quot;FPKM (UHR, Replicate 1)&quot;, ylab=&quot;FPKM (UHR, Replicate 2)&quot;, main=&quot;Comparison of expression values for a pair of replicates&quot;)
+
+#Add a straight line of slope 1, and intercept 0
+abline(a=0,b=1)
+
+#Calculate the correlation coefficient and display in a legend
+rs=cor(x,y)^2
+legend(&quot;topleft&quot;, paste(&quot;R squared = &quot;, round(rs, digits=3), sep=&quot;&quot;), lwd=1, col=&quot;black&quot;)
+
+#### Plot #5 - Scatter plots with a large number of data points can be misleading ... regenerate this figure as a density scatter plot
+colors = colorRampPalette(c(&quot;white&quot;, &quot;blue&quot;, &quot;#007FFF&quot;, &quot;cyan&quot;,&quot;#7FFF7F&quot;, &quot;yellow&quot;, &quot;#FF7F00&quot;, &quot;red&quot;, &quot;#7F0000&quot;))
+smoothScatter(x=log2(x+min_nonzero), y=log2(y+min_nonzero), xlab=&quot;FPKM (UHR, Replicate 1)&quot;, ylab=&quot;FPKM (UHR, Replicate 2)&quot;, main=&quot;Comparison of expression values for a pair of replicates&quot;, colramp=colors, nbin=200)
+
+
+#### Plot all sets of replicates on a single plot
+#Create an function that generates an R plot.  This function will take as input the two libraries to be compared and a plot name and color
+plotCor = function(lib1, lib2, name, color)&#123;
+	x=gene_expression[,lib1]
+	y=gene_expression[,lib2]
+	zero_count = length(which(x==0)) + length(which(y==0))
+	plot(x=log2(x+min_nonzero), y=log2(y+min_nonzero), pch=16, col=color, cex=0.25, xlab=lib1, ylab=lib2, main=name)
+	abline(a=0,b=1)
+	rs=cor(x,y, method=&quot;pearson&quot;)^2
+	legend_text = c(paste(&quot;R squared = &quot;, round(rs, digits=3), sep=&quot;&quot;), paste(&quot;Zero count = &quot;, zero_count, sep=&quot;&quot;))
+	legend(&quot;topleft&quot;, legend_text, lwd=c(1,NA), col=&quot;black&quot;, bg=&quot;white&quot;, cex=0.8)
+&#125;
+#Open a plotting page with room for two plots on one page
+par(mfrow=c(1,2))
+
+#Plot #6 - Now make a call to our custom function created above, once for each library comparison
+plotCor(&quot;FPKM.UHR_Rep1&quot;, &quot;FPKM.HBR_Rep1&quot;, &quot;UHR_1 vs HBR_1&quot;, &quot;tomato2&quot;)
+plotCor(&quot;FPKM.UHR_Rep2&quot;, &quot;FPKM.HBR_Rep2&quot;, &quot;UHR_2 vs HBR_2&quot;, &quot;royalblue2&quot;)
+
+
+##### One problem with these plots is that there are so many data points on top of each other, that information is being lost
+#Regenerate these plots using a density scatter plot
+plotCor2 = function(lib1, lib2, name, color)&#123;
+	x=gene_expression[,lib1]
+	y=gene_expression[,lib2]
+	zero_count = length(which(x==0)) + length(which(y==0))
+	colors = colorRampPalette(c(&quot;white&quot;, &quot;blue&quot;, &quot;#007FFF&quot;, &quot;cyan&quot;,&quot;#7FFF7F&quot;, &quot;yellow&quot;, &quot;#FF7F00&quot;, &quot;red&quot;, &quot;#7F0000&quot;))
+	smoothScatter(x=log2(x+min_nonzero), y=log2(y+min_nonzero), xlab=lib1, ylab=lib2, main=name, colramp=colors, nbin=275)
+	abline(a=0,b=1)
+	rs=cor(x,y, method=&quot;pearson&quot;)^2
+	legend_text = c(paste(&quot;R squared = &quot;, round(rs, digits=3), sep=&quot;&quot;), paste(&quot;Zero count = &quot;, zero_count, sep=&quot;&quot;))
+	legend(&quot;topleft&quot;, legend_text, lwd=c(1,NA), col=&quot;black&quot;, bg=&quot;white&quot;, cex=0.8)
+&#125;
+
+#### Plot #7 - Now make a call to our custom function created above, once for each library comparison
+par(mfrow=c(1,2))
+plotCor2(&quot;FPKM.UHR_Rep1&quot;, &quot;FPKM.HBR_Rep1&quot;, &quot;UHR_1 vs HBR_1&quot;, &quot;tomato2&quot;)
+plotCor2(&quot;FPKM.UHR_Rep2&quot;, &quot;FPKM.HBR_Rep2&quot;, &quot;UHR_2 vs HBR_2&quot;, &quot;royalblue2&quot;)
+
+
+#### Compare the correlation 'distance' between all replicates
+#Do we see the expected pattern for all eight libraries (i.e. replicates most similar, then tumor vs. normal)?
+
+#Calculate the FPKM sum for all 6 libraries
+gene_expression[,&quot;sum&quot;]=apply(gene_expression[,data_columns], 1, sum)
+
+#Identify the genes with a grand sum FPKM of at least 5 - we will filter out the genes with very low expression across the board
+i = which(gene_expression[,&quot;sum&quot;] &gt; 5)
+
+#Calculate the correlation between all pairs of data
+r=cor(gene_expression[i,data_columns], use=&quot;pairwise.complete.obs&quot;, method=&quot;pearson&quot;)
+
+#Print out these correlation values
+r
+
+#### Plot #8 - Convert correlation to 'distance', and use 'multi-dimensional scaling' to display the relative differences between libraries
+#This step calculates 2-dimensional coordinates to plot points for each library
+#Libraries with similar expression patterns (highly correlated to each other) should group together
+#What pattern do we expect to see, given the types of libraries we have (technical replicates, biologal replicates, tumor/normal)?
+d=1-r
+mds=cmdscale(d, k=2, eig=TRUE)
+par(mfrow=c(1,1))
+plot(mds$points, type=&quot;n&quot;, xlab=&quot;&quot;, ylab=&quot;&quot;, main=&quot;MDS distance plot (all non-zero genes)&quot;, xlim=c(-0.12,0.12), ylim=c(-0.12,0.12))
+points(mds$points[,1], mds$points[,2], col=&quot;grey&quot;, cex=2, pch=16)
+text(mds$points[,1], mds$points[,2], short_names, col=data_colors)
+
+# Calculate the differential expression results including significance
+results_genes = stattest(bg, feature=&quot;gene&quot;, covariate=&quot;type&quot;, getFC=TRUE, meas=&quot;FPKM&quot;)
+results_genes = merge(results_genes,bg_gene_names,by.x=c(&quot;id&quot;),by.y=c(&quot;gene_id&quot;))
+
+#### Plot #9 - View the distribution of differential expression values as a histogram
+#Display only those that are significant according to Ballgown
+
+sig=which(results_genes$pval&lt;0.05)
+results_genes[,&quot;de&quot;] = log2(results_genes[,&quot;fc&quot;])
+hist(results_genes[sig,&quot;de&quot;], breaks=50, col=&quot;seagreen&quot;, xlab=&quot;log2(Fold change) UHR vs HBR&quot;, main=&quot;Distribution of differential expression values&quot;)
+abline(v=-2, col=&quot;black&quot;, lwd=2, lty=2)
+abline(v=2, col=&quot;black&quot;, lwd=2, lty=2)
+legend(&quot;topleft&quot;, &quot;Fold-change &gt; 4&quot;, lwd=2, lty=2)
+
+#### Plot #10 - Display the grand expression values from UHR and HBR and mark those that are significantly differentially expressed
+gene_expression[,&quot;UHR&quot;]=apply(gene_expression[,c(1:3)], 1, mean)
+gene_expression[,&quot;HBR&quot;]=apply(gene_expression[,c(4:6)], 1, mean)
+
+x=log2(gene_expression[,&quot;UHR&quot;]+min_nonzero)
+y=log2(gene_expression[,&quot;HBR&quot;]+min_nonzero)
+plot(x=x, y=y, pch=16, cex=0.25, xlab=&quot;UHR FPKM (log2)&quot;, ylab=&quot;HBR FPKM (log2)&quot;, main=&quot;UHR vs HBR FPKMs&quot;)
+abline(a=0, b=1)
+xsig=x[sig]
+ysig=y[sig]
+points(x=xsig, y=ysig, col=&quot;magenta&quot;, pch=16, cex=0.5)
+legend(&quot;topleft&quot;, &quot;Significant&quot;, col=&quot;magenta&quot;, pch=16)
+
+#Get the gene symbols for the top N (according to corrected p-value) and display them on the plot
+topn = order(abs(results_genes[sig,&quot;fc&quot;]), decreasing=TRUE)[1:25]
+topn = order(results_genes[sig,&quot;qval&quot;])[1:25]
+text(x[topn], y[topn], results_genes[topn,&quot;gene_name&quot;], col=&quot;black&quot;, cex=0.75, srt=45)
+
+
+#### Write a simple table of differentially expressed transcripts to an output file
+#Each should be significant with a log2 fold-change &gt;= 2
+sigpi = which(results_genes[,&quot;pval&quot;]&lt;0.05)
+sigp = results_genes[sigpi,]
+sigde = which(abs(sigp[,&quot;de&quot;]) &gt;= 2)
+sig_tn_de = sigp[sigde,]
+
+#Order the output by or p-value and then break ties using fold-change
+o = order(sig_tn_de[,&quot;qval&quot;], -abs(sig_tn_de[,&quot;de&quot;]), decreasing=FALSE)
+
+output = sig_tn_de[o,c(&quot;gene_name&quot;,&quot;id&quot;,&quot;fc&quot;,&quot;pval&quot;,&quot;qval&quot;,&quot;de&quot;)]
+write.table(output, file=&quot;SigDE_supplementary_R.txt&quot;, sep=&quot;\t&quot;, row.names=FALSE, quote=FALSE)
+
+#View selected columns of the first 25 lines of output
+output[1:25,c(1,4,5)]
+
+#You can open the file &quot;SigDE.txt&quot; in Excel, Calc, etc.
+#It should have been written to the current working directory that you set at the beginning of the R tutorial
+dir()
+
+
+#### Plot #11 - Create a heatmap to vizualize expression differences between the eight samples
+#Define custom dist and hclust functions for use with heatmaps
+mydist=function(c) &#123;dist(c,method=&quot;euclidian&quot;)&#125;
+myclust=function(c) &#123;hclust(c,method=&quot;average&quot;)&#125;
+
+main_title=&quot;sig DE Transcripts&quot;
+par(cex.main=0.8)
+sig_genes=results_genes[sig,&quot;id&quot;]
+sig_gene_names=results_genes[sig,&quot;gene_name&quot;]
+data=log2(as.matrix(gene_expression[sig_genes,data_columns])+1)
+heatmap.2(data, hclustfun=myclust, distfun=mydist, na.rm = TRUE, scale=&quot;none&quot;, dendrogram=&quot;both&quot;, margins=c(6,7), Rowv=TRUE, Colv=TRUE, symbreaks=FALSE, key=TRUE, symkey=FALSE, density.info=&quot;none&quot;, trace=&quot;none&quot;, main=main_title, cexRow=0.3, cexCol=1, labRow=sig_gene_names,col=rev(heat.colors(75)))
+
+dev.off()
+
+#The output file can be viewed in your browser at the following url:
+#Note, you must replace __YOUR_IP_ADDRESS__ with your own amazon instance IP
+#http://__YOUR_IP_ADDRESS__/workspace/rnaseq/de/ballgown/ref_only/Tutorial_Part3_Supplementary_R_output.pdf
+#To exit R type:
+quit(save=&quot;no&quot;)
+
+</code></pre><p><img data-src="/img/posts/2020.12.26/image-20210105164626539.png" alt="image-20210105164626539"></p><p><img data-src="/img/posts/2020.12.26/image-20210105164645781.png" alt="image-20210105164645781"></p><div class="tags"><a href="/tags/bioinformatics/" rel="tag"><i class="ic i-tag"></i> bioinformatics</a> <a href="/tags/RNAseq/" rel="tag"><i class="ic i-tag"></i> RNAseq</a></div></div><footer><div class="meta"><span class="item"><span class="icon"><i class="ic i-calendar-check"></i> </span><span class="text">更新于</span> <time title="修改时间：2022-12-14 10:55:44" itemprop="dateModified" datetime="2022-12-14T10:55:44+08:00">2022-12-14</time> </span><span id="2020/12/26/2020-12-26-RNAseq(14)/" class="item leancloud_visitors" data-flag-title="RNAseq 教程 (3.3)" title="阅读次数"><span class="icon"><i class="ic i-eye"></i> </span><span class="text">阅读次数</span> <span class="leancloud-visitors-count"></span> <span class="text">次</span></span></div><div class="reward"><button><i class="ic i-heartbeat"></i> 赞赏</button><p>请我喝[茶]~(￣▽￣)~*</p><div id="qr"><div><img data-src="/images/wechatpay.png" alt="kuchi Shū 微信支付"><p>微信支付</p></div><div><img data-src="/images/alipay.png" alt="kuchi Shū 支付宝"><p>支付宝</p></div></div></div><div id="copyright"><ul><li class="author"><strong>本文作者： </strong>kuchi Shū <i class="ic i-at"><em>@</em></i>小钊の笔记</li><li class="link"><strong>本文链接：</strong> <a href="http://example.com/2020/12/26/2020-12-26-RNAseq(14)/" title="RNAseq 教程 (3.3)">http://example.com/2020/12/26/2020-12-26-RNAseq(14)/</a></li><li class="license"><strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！</li></ul></div></footer></article></div><div class="post-nav"><div class="item left"><a href="/2020/12/24/2020-12-24-RNAseq(13)/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;img1.imgtp.com&#x2F;2022&#x2F;12&#x2F;19&#x2F;uXV5m4Kx.jpg" title="RNAseq教程(3.2)"><span class="type">上一篇</span> <span class="category"><i class="ic i-flag"></i> 生信学习</span><h3>RNAseq教程(3.2)</h3></a></div><div class="item right"><a href="/2020/12/29/2020-12-29-RNAseq(15)/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;img1.imgtp.com&#x2F;2022&#x2F;12&#x2F;19&#x2F;CNhSGrB1.jpg" title="RNAseq教程(3.4)"><span class="type">下一篇</span> <span class="category"><i class="ic i-flag"></i> 生信学习</span><h3>RNAseq教程(3.4)</h3></a></div></div><div class="wrap" id="comments"></div></div><div id="sidebar"><div class="inner"><div class="panels"><div class="inner"><div class="contents panel pjax" data-title="文章目录"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#33-de-visualization"><span class="toc-number">2.</span> <span class="toc-text">3.3 DE Visualization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%9D%E5%A4%96%E5%88%86%E6%9E%90"><span class="toc-number">2.1.</span> <span class="toc-text">额外分析</span></a></li></ol></li></ol></div><div class="related panel pjax" data-title="系列文章"><ul><li><a href="/2020/07/08/2020-07-08-repeat/" rel="bookmark" title="RepeatModeler+RepeatMasker的安装与使用">RepeatModeler+RepeatMasker的安装与使用</a></li><li><a href="/2020/07/09/2020-07-09-github+jekyll/" rel="bookmark" title="利用Github+Jekyll构建自己的博客">利用Github+Jekyll构建自己的博客</a></li><li><a href="/2020/07/18/2020-07-18-orthofinder/" rel="bookmark" title="利用orthofinder寻找单拷贝基因构建系统发育树">利用orthofinder寻找单拷贝基因构建系统发育树</a></li><li><a href="/2020/07/20/2020-07-20-fungi/" rel="bookmark" title="文献导读：真菌进化">文献导读：真菌进化</a></li><li><a href="/2020/08/03/2020-08-03-WGCNA1/" rel="bookmark" title="WGCNA学习：WGCNA分析原理">WGCNA学习：WGCNA分析原理</a></li><li><a href="/2020/08/05/2020-08-05-WGCNA2/" rel="bookmark" title="WGCNA学习：WGCNA应用场景与实例解读">WGCNA学习：WGCNA应用场景与实例解读</a></li><li><a href="/2020/08/08/2020-08-08-WGCNA3/" rel="bookmark" title="WGCNA学习：WGCNA分析实战">WGCNA学习：WGCNA分析实战</a></li><li><a href="/2020/08/10/2020-08-10-cytoscape/" rel="bookmark" title="基因共表达网络图的绘制">基因共表达网络图的绘制</a></li><li><a href="/2020/08/18/2020-08-18-sys/" rel="bookmark" title="根据转录组数据鉴定共生物种">根据转录组数据鉴定共生物种</a></li><li><a href="/2020/08/20/2020-08-20-nt/" rel="bookmark" title="使用本地nt数据库对reads和Trinity结果进行blast">使用本地nt数据库对reads和Trinity结果进行blast</a></li><li><a href="/2020/08/23/2020-08-23-IGV/" rel="bookmark" title="使用IGV简单绘制甲基化分布图">使用IGV简单绘制甲基化分布图</a></li><li><a href="/2020/08/25/2020-08-25-evolview1/" rel="bookmark" title="进化树美化之Evolview--热图（1）">进化树美化之Evolview--热图（1）</a></li><li><a href="/2020/08/28/2020-08-28-evolview/" rel="bookmark" title="进化树美化之Evolview--热图（2）">进化树美化之Evolview--热图（2）</a></li><li><a href="/2020/08/30/2020-08-30-evolview3/" rel="bookmark" title="进化树+蛋白结构域">进化树+蛋白结构域</a></li><li><a href="/2020/09/01/2020-09-01-iTOL1/" rel="bookmark" title="进化树在线制作工具iTOL教程（1）：基本操作">进化树在线制作工具iTOL教程（1）：基本操作</a></li><li><a href="/2020/09/03/2020-09-03-iTOL2/" rel="bookmark" title="进化树在线制作工具iTOL教程（2）：添加文本">进化树在线制作工具iTOL教程（2）：添加文本</a></li><li><a href="/2020/09/06/2020-09-06-iTOL3/" rel="bookmark" title="进化树在线制作工具iTOL教程（3）：添加图片">进化树在线制作工具iTOL教程（3）：添加图片</a></li><li><a href="/2020/09/08/2020-09-08-iTOL4/" rel="bookmark" title="进化树在线制作工具iTOL教程（4）：添加点图">进化树在线制作工具iTOL教程（4）：添加点图</a></li><li><a href="/2020/09/29/2020-09-29-ScRNAseq(1)/" rel="bookmark" title="单细胞实战(1)：原始测序数据下载">单细胞实战(1)：原始测序数据下载</a></li><li><a href="/2020/10/01/2020-10-01-ScRNAseq(2)/" rel="bookmark" title="单细胞实战(2)：cellranger使用">单细胞实战(2)：cellranger使用</a></li><li><a href="/2020/10/03/2020-10-03-ScRNAseq(3)/" rel="bookmark" title="单细胞实战(3)：STAR分析单细胞数据">单细胞实战(3)：STAR分析单细胞数据</a></li><li><a href="/2020/10/06/2020-10-06-ScRNAseq(4)/" rel="bookmark" title="单细胞实战(4)：STAR与cellranger结果比较">单细胞实战(4)：STAR与cellranger结果比较</a></li><li><a href="/2020/10/10/2020-10-10-ScRNAseq(5)/" rel="bookmark" title="单细胞实战(5)：复现文章中的聚类图（1）">单细胞实战(5)：复现文章中的聚类图（1）</a></li><li><a href="/2020/10/13/2020-10-13-ScRNAseq(6)/" rel="bookmark" title="单细胞实战(5)：复现文章中的聚类图（2）">单细胞实战(5)：复现文章中的聚类图（2）</a></li><li><a href="/2020/10/24/2020-10-24-ScRNAseq(7)/" rel="bookmark" title="生信技能树单细胞数据挖掘笔记(1)">生信技能树单细胞数据挖掘笔记(1)</a></li><li><a href="/2020/10/27/2020-10-27-ScRNAseq(8)/" rel="bookmark" title="生信技能树单细胞数据挖掘笔记(2)">生信技能树单细胞数据挖掘笔记(2)</a></li><li><a href="/2020/10/29/2020-10-29-ScRNAseq(9)/" rel="bookmark" title="生信技能树单细胞数据挖掘笔记(3)">生信技能树单细胞数据挖掘笔记(3)</a></li><li><a href="/2020/10/31/2020-10-31-ScRNAseq(10)/" rel="bookmark" title="生信技能树单细胞数据挖掘笔记(4)">生信技能树单细胞数据挖掘笔记(4)</a></li><li><a href="/2020/11/03/2020-11-03-ScRNAseq(11)/" rel="bookmark" title="生信技能树单细胞数据挖掘笔记(5)">生信技能树单细胞数据挖掘笔记(5)</a></li><li><a href="/2020/11/05/2020-11-05-ScRNAseq(12)/" rel="bookmark" title="生信技能树单细胞数据挖掘笔记(6)">生信技能树单细胞数据挖掘笔记(6)</a></li><li><a href="/2020/11/07/2020-11-07-ScRNAseq(13)/" rel="bookmark" title="生信技能树单细胞数据挖掘笔记(7)">生信技能树单细胞数据挖掘笔记(7)</a></li><li><a href="/2020/11/10/2020-11-10-RNAvelocity(1)/" rel="bookmark" title="RNA速率：软件下载与loom文件准备">RNA速率：软件下载与loom文件准备</a></li><li><a href="/2020/11/12/2020-11-12-RNAvelocity(2)/" rel="bookmark" title="RNA速率：数据读入">RNA速率：数据读入</a></li><li><a href="/2020/11/14/2020-11-14-RNAvelocity(3)/" rel="bookmark" title="RNA速率：使用Seurat的结果做RNA velocity">RNA速率：使用Seurat的结果做RNA velocity</a></li><li><a href="/2020/11/17/2020-11-17-RNAseq(1)/" rel="bookmark" title="RNAseq教程(1.1)">RNAseq教程(1.1)</a></li><li><a href="/2020/11/19/2020-11-19-annotion(1)/" rel="bookmark" title="基因结构注释（1）：从头注释">基因结构注释（1）：从头注释</a></li><li><a href="/2020/11/21/2020-11-21-annotion(2)/" rel="bookmark" title="基因结构注释（2）：同源注释">基因结构注释（2）：同源注释</a></li><li><a href="/2020/11/24/2020-11-24-annotion(3)/" rel="bookmark" title="基因结构注释（3）：转录组注释">基因结构注释（3）：转录组注释</a></li><li><a href="/2020/11/26/2020-11-26-annotion(4)/" rel="bookmark" title="基因结构注释（4）：整合预测结果">基因结构注释（4）：整合预测结果</a></li><li><a href="/2020/11/28/2020-11-28-RNAseq(2)/" rel="bookmark" title="RNAseq教程(1.2)">RNAseq教程(1.2)</a></li><li><a href="/2020/12/01/2020-12-01-RNAseq(3)/" rel="bookmark" title="RNAseq教程(1.3)">RNAseq教程(1.3)</a></li><li><a href="/2020/12/03/2020-12-03-RNAseq(4)/" rel="bookmark" title="RNAseq教程(1.4)">RNAseq教程(1.4)</a></li><li><a href="/2020/12/05/2020-12-05-RNAseq(5)/" rel="bookmark" title="RNAseq教程(1.5)">RNAseq教程(1.5)</a></li><li><a href="/2020/12/08/2020-12-08-RNAseq(6)/" rel="bookmark" title="RNAseq教程(1.6)">RNAseq教程(1.6)</a></li><li><a href="/2020/12/10/2020-12-10-RNAseq(7)/" rel="bookmark" title="RNAseq教程(2.1)">RNAseq教程(2.1)</a></li><li><a href="/2020/12/12/2020-12-12-RNAseq(8)/" rel="bookmark" title="RNAseq教程(2.2)">RNAseq教程(2.2)</a></li><li><a href="/2020/12/15/2020-12-15-RNAseq(9)/" rel="bookmark" title="RNAseq教程(2.3)">RNAseq教程(2.3)</a></li><li><a href="/2020/12/17/2020-12-17-RNAseq(10)/" rel="bookmark" title="RNAseq教程(2.4)">RNAseq教程(2.4)</a></li><li><a href="/2020/12/19/2020-12-19-RNAseq(11)/" rel="bookmark" title="RNAseq教程(2.5)">RNAseq教程(2.5)</a></li><li><a href="/2020/12/22/2020-12-22-RNAseq(12)/" rel="bookmark" title="RNAseq教程(3.1)">RNAseq教程(3.1)</a></li><li><a href="/2020/12/24/2020-12-24-RNAseq(13)/" rel="bookmark" title="RNAseq教程(3.2)">RNAseq教程(3.2)</a></li><li class="active"><a href="/2020/12/26/2020-12-26-RNAseq(14)/" rel="bookmark" title="RNAseq教程(3.3)">RNAseq教程(3.3)</a></li><li><a href="/2020/12/29/2020-12-29-RNAseq(15)/" rel="bookmark" title="RNAseq教程(3.4)">RNAseq教程(3.4)</a></li><li><a href="/2020/12/31/2020-12-31-RNAseq(16)/" rel="bookmark" title="RNAseq教程(4.1)">RNAseq教程(4.1)</a></li><li><a href="/2021/01/02/2021-01-02-RNAseq(17)/" rel="bookmark" title="RNAseq教程(4.2)">RNAseq教程(4.2)</a></li><li><a href="/2021/01/05/2021-01-05-RNAseq(18)/" rel="bookmark" title="RNAseq教程(4.3)">RNAseq教程(4.3)</a></li><li><a href="/2021/01/07/2021-01-07-RNAseq(19)/" rel="bookmark" title="RNAseq教程(4.4)">RNAseq教程(4.4)</a></li><li><a href="/2021/01/09/2021-01-09-RNAseq(20)/" rel="bookmark" title="RNAseq教程(4.5)">RNAseq教程(4.5)</a></li><li><a href="/2021/01/12/2021-01-12-RNAseq(21)/" rel="bookmark" title="RNAseq教程(5)">RNAseq教程(5)</a></li><li><a href="/2022/12/08/2022-12-08-SingleCopy/" rel="bookmark" title="比较基因组学分析1：构建单拷贝基因树">比较基因组学分析1：构建单拷贝基因树</a></li><li><a href="/2022/12/14/2022-12-14-CAFE/" rel="bookmark" title="比较基因组学分析2：基因家族收缩与扩张分析">比较基因组学分析2：基因家族收缩与扩张分析</a></li><li><a href="/2022/12/15/2022-12-15-GO/" rel="bookmark" title="比较基因组学分析3：特异节点基因家族富集分析（非模式物种GO/KEEG库构建）">比较基因组学分析3：特异节点基因家族富集分析（非模式物种GO/KEEG库构建）</a></li></ul></div><div class="overview panel" data-title="站点概览"><div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="image" itemprop="image" alt="kuchi Shū" data-src="/images/avatar.png"><p class="name" itemprop="name">kuchi Shū</p><div class="description" itemprop="description">生物学在读博士</div></div><nav class="state"><div class="item posts"><a href="/archives/"><span class="count">83</span> <span class="name">文章</span></a></div><div class="item categories"><a href="/categories/"><span class="count">6</span> <span class="name">分类</span></a></div><div class="item tags"><a href="/tags/"><span class="count">20</span> <span class="name">标签</span></a></div></nav><div class="social"><span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jpb2luZm9ybWF0aWNzLXJvb2tpZQ==" title="https:&#x2F;&#x2F;github.com&#x2F;Bioinformatics-rookie"><i class="ic i-github"></i></span> <span class="exturl item about" data-url="aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuL2Fib3V0Lw==" title="https:&#x2F;&#x2F;www.zhouxiaozhao.cn&#x2F;about&#x2F;"><i class="ic i-address-card"></i></span> <span class="exturl item email" data-url="bWFpbHRvOnpob3VzaGl6aGFvQG1haWwua2liLmFjLmNu" title="mailto:zhoushizhao@mail.kib.ac.cn"><i class="ic i-envelope"></i></span></div><ul class="menu"><li class="item"><a href="/" rel="section"><i class="ic i-home"></i>首页</a></li><li class="item"><a href="/about/" rel="section"><i class="ic i-user"></i>关于</a></li><li class="item dropdown"><a href="javascript:void(0);"><i class="ic i-feather"></i>文章</a><ul class="submenu"><li class="item"><a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a></li><li class="item"><a href="/categories/" rel="section"><i class="ic i-th"></i>分类</a></li><li class="item"><a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a></li></ul></li><li class="item"><a href="/links/" rel="section"><i class="ic i-heart"></i>友達</a></li></ul></div></div></div><ul id="quick"><li class="prev pjax"><a href="/2020/12/24/2020-12-24-RNAseq(13)/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a></li><li class="up"><i class="ic i-arrow-up"></i></li><li class="down"><i class="ic i-arrow-down"></i></li><li class="next pjax"><a href="/2020/12/29/2020-12-29-RNAseq(15)/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a></li><li class="percent"></li></ul></div></div><div class="dimmer"></div></div></main><footer id="footer"><div class="inner"><div class="widgets"><div class="rpost pjax"><h2>随机文章</h2><ul><li class="item"><div class="breadcrumb"><a href="/categories/Bioinformation/" title="分类于 生信学习">生信学习</a></div><span><a href="/2020/08/18/2020-08-18-sys/" title="根据转录组数据鉴定共生物种">根据转录组数据鉴定共生物种</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/Bioinformation/" title="分类于 生信学习">生信学习</a></div><span><a href="/2020/11/28/2020-11-28-RNAseq(2)/" title="RNAseq教程(1.2)">RNAseq教程(1.2)</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/Python/" title="分类于 Python">Python</a></div><span><a href="/2020/09/10/2020-09-10-python10/" title="马士兵教育Python入门基础:1.python入门（一）">马士兵教育Python入门基础:1.python入门（一）</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/Bioinformation/" title="分类于 生信学习">生信学习</a></div><span><a href="/2020/12/22/2020-12-22-RNAseq(12)/" title="RNAseq教程(3.1)">RNAseq教程(3.1)</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/paper/" title="分类于 文献导读">文献导读</a></div><span><a href="/2020/07/27/2020-07-27-Symbiotic/" title="文献导读:菌虫共生真菌测序">文献导读:菌虫共生真菌测序</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/Bioinformation/" title="分类于 生信学习">生信学习</a></div><span><a href="/2020/11/19/2020-11-19-annotion(1)/" title="基因结构注释（1）：从头注释">基因结构注释（1）：从头注释</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/paper/" title="分类于 文献导读">文献导读</a></div><span><a href="/2020/09/22/2020-09-22-Cool_your_github/" title="炫酷你的Github主页">炫酷你的Github主页</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/R/" title="分类于 R">R</a></div><span><a href="/2020/07/25/2020-07-25-R4ds2/" title="R数据科学笔记:2">R数据科学笔记:2</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/Bioinformation/" title="分类于 生信学习">生信学习</a></div><span><a href="/2020/08/28/2020-08-28-evolview/" title="进化树美化之Evolview--热图（2）">进化树美化之Evolview--热图（2）</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/Bioinformation/" title="分类于 生信学习">生信学习</a></div><span><a href="/2020/11/26/2020-11-26-annotion(4)/" title="基因结构注释（4）：整合预测结果">基因结构注释（4）：整合预测结果</a></span></li></ul></div><div><h2>最新评论</h2><ul class="leancloud-recent-comment"></ul></div></div><div class="status"><div class="copyright">&copy; 2010 – <span itemprop="copyrightYear">2023</span> <span class="with-love"><i class="ic i-sakura rotate"></i> </span><span class="author" itemprop="copyrightHolder">kuchi Shū @ Zhou Xiaozhao</span></div><div class="count"><span class="post-meta-item-icon"><i class="ic i-chart-area"></i> </span><span title="站点总字数">344k 字</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="ic i-coffee"></i> </span><span title="站点阅读时长">5:13</span></div><div class="powered-by">基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span></div></div></div></footer></div><script data-config type="text/javascript">var LOCAL={path:"2020/12/26/2020-12-26-RNAseq(14)/",favicon:{show:"（●´3｀●）やれやれだぜ",hide:"(´Д｀)大変だ！"},search:{placeholder:"文章搜索",empty:"关于 「 ${query} 」，什么也没搜到",stats:"${time} ms 内找到 ${hits} 条结果"},valine:!0,fancybox:!0,copyright:'复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',ignores:[function(e){return e.includes("#")},function(e){return new RegExp(LOCAL.path+"$").test(e)}]}</script><script src="https://cdn.polyfill.io/v2/polyfill.js"></script><script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script><script src="/js/app.js?v=0.2.5"></script></body></html><!-- rebuild by hrmmi -->
