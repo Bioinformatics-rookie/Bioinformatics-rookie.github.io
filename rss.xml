@@ -125,7 +125,7 @@ ggsave(&amp;quot;STEEL/pseudotime_feature1.pdf&amp;quot;, plot = p1, width = 8, 
 &lt;p&gt;主要的亮点就在于可以把拟时结果体现在我们的组织切片上，这样我们在&lt;strong&gt; orderCells&lt;/strong&gt; 这一步可以更加方便的判断每个 spot 的拟时间&lt;br&gt;
 &lt;img data-src=&#34;/img/posts/2023.2.24/7.png&#34; alt=&#34;拟时间结果&#34;&gt;&lt;br&gt;
 &lt;img data-src=&#34;/img/posts/2023.2.24/8.png&#34; alt=&#34;正文结果&#34;&gt;&lt;br&gt;
-&lt;img data-src=&#34;/img/posts/2023.2.24/29.png&#34; alt=&#34;体现在切片上&#34;&gt;&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/9.png&#34; alt=&#34;体现在切片上&#34;&gt;&lt;br&gt;
 可以看到和文章里的是一模一样的，接下来就是复现文章中的基因拟时分布和 BEAM 结果&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;data_subset &amp;lt;- HSMM_myo[&#39;PAXXG054350&#39;,]
 p1&amp;lt;-plot_genes_in_pseudotime(data_subset, color_by = &amp;quot;clusters&amp;quot;)
