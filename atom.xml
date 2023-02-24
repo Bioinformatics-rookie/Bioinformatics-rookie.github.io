@@ -8,8 +8,173 @@
     <author>
       <name>amane</name>
     </author>
-    <updated>2023-02-21T16:00:00.000Z</updated>
+    <updated>2023-02-23T16:00:00.000Z</updated>
     <category term="zhoushizhao" />
+    <entry>
+        <id>https://www.zhouxiaozhao.cn/2023/02/24/2023-02-24-ST(2)/</id>
+        <title>植物空间转录组分析2：STEEL+Seurat</title>
+        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2023/02/24/2023-02-24-ST(2)/"/>
+        <content type="html">&lt;p&gt;本文将继续使用兰花空间转录组的数据，同时运用文献中提到的 STEEL 聚类方法进行分析，该方法也是由戚继团队开发的，看文章感觉聚类效果不错。&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/1.png&#34; alt=&#34;聚类比较&#34;&gt;&lt;/p&gt;
+&lt;p&gt;目前该文章还未被接收，大家可以先用下软件，主要能提供聚类信息和每个聚类的 marker 基因，但个人认为可视化方面还有所欠缺，所以这个教程将结合 STEEL 的聚类方法与 Seurat 的可视化函数来完整复现文章的聚类图和拟时图&lt;/p&gt;
+&lt;h1 id=&#34;steel聚类分析&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#steel聚类分析&#34;&gt;#&lt;/a&gt; STEEL 聚类分析&lt;/h1&gt;
+&lt;p&gt;软件下载&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly9zdGVlbC1zdC5zb3VyY2Vmb3JnZS5pby8=&#34;&gt; STEEL (sourceforge.io)&lt;/span&gt;&lt;br&gt;
+ 使用说明&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/2.png&#34; alt=&#34;image.png&#34;&gt;&lt;br&gt;
+ 主要的参数就是 &lt;strong&gt;--beads&lt;/strong&gt; &lt;strong&gt;--genes&lt;/strong&gt; &lt;strong&gt;--pca&lt;/strong&gt; &lt;strong&gt;--group&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt; ./steel filtered_feature_bc_matrix  spatial/tissue_positions_list.csv --pca=20  pca20out
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;输出结果&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/3.png&#34; alt=&#34;steel&#34;&gt;&lt;br&gt;
+genes 文件里面包含的就是聚类特异基因，map 文件就是聚类信息，我们使用&lt;strong&gt; pca20out.map.40&lt;/strong&gt; 的聚类信息进行后续的分析&lt;/p&gt;
+&lt;h1 id=&#34;seurat聚类图&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#seurat聚类图&#34;&gt;#&lt;/a&gt; Seurat 聚类图&lt;/h1&gt;
+&lt;p&gt;使用 Seurat 读取原始的数据，并将 STEEL 聚类信息读入&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(Seurat)
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+library(cowplot)
+library(gtools)
+library(stringr)
+library(Matrix)
+library(tidyverse)
+library(patchwork)
+orc1&amp;lt;- Load10X_Spatial(&amp;quot;Slide_1&amp;quot;)
+## 直接导入STEEL的聚类信息
+STEEL&amp;lt;- read.delim(&amp;quot;STEEL/Slide1.map.40&amp;quot;,row.names = 1)
+orc1[[&amp;quot;seurat_clusters&amp;quot;]] &amp;lt;- NA
+
+clusters&amp;lt;-data.frame(STEEL$Cluster)
+rownames(clusters) &amp;lt;- rownames(STEEL)
+orc1[[&amp;quot;seurat_clusters&amp;quot;]][rownames(clusters),] &amp;lt;- clusters
+## 去除NA值只保留有聚类的
+orc1_new &amp;lt;- orc1[,rownames(clusters)]
+Idents(orc1_new) &amp;lt;- &#39;seurat_clusters&#39;
+Idents(orc1_new) &amp;lt;- factor(Idents(orc1_new),levels=mixedsort(levels(Idents(orc1_new))))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接下来就是利用&lt;strong&gt; SpatialDimPlot&lt;/strong&gt; 绘制聚类图了&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;orc1_new &amp;lt;- SCTransform(orc1_new, assay = &amp;quot;Spatial&amp;quot;, return.only.var.genes = FALSE, verbose = FALSE)
+orc1_new &amp;lt;- RunPCA(orc1_new, features = VariableFeatures(orc1_new)) 
+orc1_new &amp;lt;- RunTSNE(orc1_new, dims = 1:20)
+p1 &amp;lt;- DimPlot(orc1_new, reduction = &amp;quot;tsne&amp;quot;, label = TRUE)
+p2 &amp;lt;- SpatialDimPlot(orc1_new, group.by = &amp;quot;seurat_clusters&amp;quot;,label.size = 3, pt.size.factor = 1.3)
+pearplot &amp;lt;- plot_grid(p1,p2)
+ggsave(&amp;quot;STEEL/tsne_Slide1_40.pdf&amp;quot;, plot = pearplot, width = 6, height = 6)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img data-src=&#34;/img/posts/2023.2.24/4.png&#34; alt=&#34;聚类信息&#34;&gt;&lt;br&gt;
+这个结果其实已经和原文一模一样了，就是颜色不对应&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/5.png&#34; alt=&#34;原文&#34;&gt;&lt;br&gt;
+单看某个聚类对应关系，完全一致&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;p1&amp;lt;- SpatialDimPlot(orc1_new, cells.highlight = CellsByIdentities(object = orc1_new, idents = c(1:40)), facet.highlight = TRUE, ncol = 5)
+ggsave(&amp;quot;STEEL/cluster_Slide1all.pdf&amp;quot;, plot = p1, width = 19, height = 12)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img data-src=&#34;/img/posts/2023.2.24/6.png&#34; alt=&#34;聚类对应&#34;&gt;&lt;br&gt;
+对应好聚类关系接下就是拟时分析了&lt;/p&gt;
+&lt;h1 id=&#34;拟时分析&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#拟时分析&#34;&gt;#&lt;/a&gt; 拟时分析&lt;/h1&gt;
+&lt;p&gt;在文章中做了两次拟时分析，本次分析只以 Fig2 的组织进行分析，其他的大家也可以自尝试&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(monocle)
+subdata &amp;lt;- subset(orc1_new, idents = c(19,21,37,38,39,40))
+
+#选择要分析的亚群
+expression_matrix = subdata@assays$Spatial@counts
+cell_metadata &amp;lt;- data.frame(group = subdata[[&#39;orig.ident&#39;]],clusters = Idents(subdata))
+gene_annotation &amp;lt;- data.frame(gene_short_name = rownames(expression_matrix), stringsAsFactors = F) 
+rownames(gene_annotation) &amp;lt;- rownames(expression_matrix)
+pd &amp;lt;- new(&amp;quot;AnnotatedDataFrame&amp;quot;, data = cell_metadata)
+fd &amp;lt;- new(&amp;quot;AnnotatedDataFrame&amp;quot;, data = gene_annotation)
+HSMM &amp;lt;- newCellDataSet(expression_matrix,
+                       phenoData = pd,
+                       featureData = fd,
+                       expressionFamily=negbinomial.size())
+HSMM &amp;lt;- detectGenes(HSMM,min_expr = 0.1)
+HSMM_myo &amp;lt;- estimateSizeFactors(HSMM)
+HSMM_myo &amp;lt;- estimateDispersions(HSMM_myo)
+disp_table &amp;lt;- dispersionTable(HSMM_myo)
+disp.genes &amp;lt;- subset(disp_table, mean_expression &amp;gt;= 0.1 )
+disp.genes &amp;lt;- as.character(disp.genes$gene_id)
+
+HSMM_myo &amp;lt;- reduceDimension(HSMM_myo, max_components = 2, method = &#39;DDRTree&#39;)
+
+HSMM_myo &amp;lt;-orderCells(HSMM_myo,reverse = T)
+#State轨迹分布图
+plot1 &amp;lt;- plot_cell_trajectory(HSMM_myo, color_by = &amp;quot;State&amp;quot;)
+##Cluster轨迹分布图
+plot2 &amp;lt;- plot_cell_trajectory(HSMM_myo, color_by = &amp;quot;clusters&amp;quot;)
+##Pseudotime轨迹图
+plot3 &amp;lt;- plot_cell_trajectory(HSMM_myo, color_by = &amp;quot;Pseudotime&amp;quot;)
+plotc &amp;lt;- plot1|plot2|plot3
+ggsave(&amp;quot;STEEL/Combination1.pdf&amp;quot;, plot = plotc, width = 18, height = 6.2)
+
+#绘制拟时间
+cell_Pseudotime &amp;lt;- data.frame(pData(HSMM_myo)$Pseudotime)
+rownames(cell_Pseudotime) &amp;lt;- rownames(cell_metadata) 
+#把拟时间对应到到组织切片位置上
+orc1_new[[&#39;Pseudotime&#39;]] &amp;lt;- NA
+orc1_new[[&#39;Pseudotime&#39;]][rownames(cell_Pseudotime),] &amp;lt;- cell_Pseudotime
+p1 &amp;lt;- SpatialFeaturePlot(orc1_new, features = c(&amp;quot;Pseudotime&amp;quot;),pt.size.factor = 1.3)
+ggsave(&amp;quot;STEEL/pseudotime_feature1.pdf&amp;quot;, plot = p1, width = 8, height = 9)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;主要的亮点就在于可以把拟时结果体现在我们的组织切片上，这样我们在&lt;strong&gt; orderCells&lt;/strong&gt; 这一步可以更加方便的判断每个 spot 的拟时间&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/7.png&#34; alt=&#34;拟时间结果&#34;&gt;&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/8.png&#34; alt=&#34;正文结果&#34;&gt;&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/29.png&#34; alt=&#34;体现在切片上&#34;&gt;&lt;br&gt;
+可以看到和文章里的是一模一样的，接下来就是复现文章中的基因拟时分布和 BEAM 结果&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;data_subset &amp;lt;- HSMM_myo[&#39;PAXXG054350&#39;,]
+p1&amp;lt;-plot_genes_in_pseudotime(data_subset, color_by = &amp;quot;clusters&amp;quot;)
+
+data_subset &amp;lt;- HSMM_myo[&#39;PAXXG051950&#39;,]
+p2&amp;lt;-plot_genes_in_pseudotime(data_subset, color_by = &amp;quot;clusters&amp;quot;)
+
+data_subset &amp;lt;- HSMM_myo[&#39;PAXXG086750&#39;,]
+p3&amp;lt;-plot_genes_in_pseudotime(data_subset, color_by = &amp;quot;clusters&amp;quot;)
+
+data_subset &amp;lt;- HSMM_myo[&#39;PAXXG345890&#39;,]
+p4&amp;lt;-plot_genes_in_pseudotime(data_subset, color_by = &amp;quot;clusters&amp;quot;)
+
+data_subset &amp;lt;- HSMM_myo[&#39;PAXXG010560&#39;,]
+p5&amp;lt;-plot_genes_in_pseudotime(data_subset, color_by = &amp;quot;clusters&amp;quot;)
+
+data_subset &amp;lt;- HSMM_myo[&#39;PAXXG074500&#39;,]
+p6&amp;lt;-plot_genes_in_pseudotime(data_subset, color_by = &amp;quot;clusters&amp;quot;) #color_by可以换成state或者pseudotime
+pearplot &amp;lt;- plot_grid(p1,p2,p3,p4,p5,p6,align = &amp;quot;v&amp;quot;,axis = &amp;quot;b&amp;quot;,ncol = 1)
+ggsave(&amp;quot;STEEL/gene_pseudotime1.pdf&amp;quot;, plot = pearplot, width = 5, height = 15)
+
+#拟时相关基因聚类热图   
+disp_table &amp;lt;- dispersionTable(HSMM_myo)
+disp.genes &amp;lt;- subset(disp_table, mean_expression &amp;gt;= 0.5&amp;amp;dispersion_empirical &amp;gt;= 1*dispersion_fit)
+disp.genes &amp;lt;- as.character(disp.genes$gene_id)
+mycds_sub &amp;lt;- HSMM_myo[disp.genes,]
+diff_test &amp;lt;- differentialGeneTest(HSMM_myo[disp.genes,], cores = 4, 
+                                  fullModelFormulaStr = &amp;quot;~sm.ns(Pseudotime)&amp;quot;)
+sig_gene_names &amp;lt;- row.names(subset(diff_test, qval &amp;lt; 1e-04))
+p2 = plot_pseudotime_heatmap(HSMM_myo[sig_gene_names,], num_clusters=6,
+                             show_rownames=F, return_heatmap=T)
+ggsave(&amp;quot;STEEL/pseudotime_heatmap1.pdf&amp;quot;, plot = p2, width = 5, height = 10)
+## BEAM分析
+my_pseudotime_de &amp;lt;- differentialGeneTest(HSMM_myo, cores = 5)
+
+BEAM_res &amp;lt;- BEAM(HSMM_myo, branch_point = 1, cores = 4)
+
+BEAM_res &amp;lt;- BEAM_res[order(BEAM_res$qval),]
+BEAM_res &amp;lt;- BEAM_res[,c(&amp;quot;gene_short_name&amp;quot;, &amp;quot;pval&amp;quot;, &amp;quot;qval&amp;quot;)]
+
+mycds_sub_beam &amp;lt;- HSMM_myo[row.names(subset(BEAM_res, qval &amp;lt; 1e-4)),]
+pdf(&amp;quot;STEEL/BEAM1.pdf&amp;quot;, width = 8, height = 12)
+plot_genes_branched_heatmap(mycds_sub_beam, branch_point = 1, num_clusters = 6, cores = 4,show_rownames = FALSE)
+dev.off()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以看到 BEAM 不太相同，但除了这个以外其他的都是完全一致，这次分析达到了文章中的效果，比较满意&lt;/p&gt;
+&lt;p&gt;&lt;img data-src=&#34;/img/posts/2023.2.24/10.png&#34; alt=&#34;pseudotime&#34;&gt;&lt;br&gt;
+&lt;img data-src=&#34;/img/posts/2023.2.24/11.png&#34; alt=&#34;BEAM&#34;&gt;&lt;/p&gt;
+&lt;p&gt;#总结&lt;br&gt;
+目前植物空间转录组刚刚起步，相信今年会有很多文章出现，到时候主要就是看创新点在哪，能解决什么问题&lt;/p&gt;
+</content>
+        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
+        <category term="单细胞" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/SingleCell/" />
+        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
+        <category term="spatial_transcriptome" scheme="https://www.zhouxiaozhao.cn/tags/spatial-transcriptome/" />
+        <updated>2023-02-23T16:00:00.000Z</updated>
+    </entry>
     <entry>
         <id>https://www.zhouxiaozhao.cn/2023/02/22/2023-02-22-ST(1)/</id>
         <title>植物空间转录组分析1：Seurat基本流程</title>
@@ -3010,76 +3175,5 @@ flexbar --adapter-min-overlap 7 --adapter-trim-end RIGHT --adapters illumina_mul
         <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
         <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
         <updated>2020-12-10T10:38:45.000Z</updated>
-    </entry>
-    <entry>
-        <id>https://www.zhouxiaozhao.cn/2020/12/08/2020-12-08-RNAseq(6)/</id>
-        <title>RNAseq教程(1.6)</title>
-        <link rel="alternate" href="https://www.zhouxiaozhao.cn/2020/12/08/2020-12-08-RNAseq(6)/"/>
-        <content type="html">&lt;h2 id=&#34;目录&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#目录&#34;&gt;#&lt;/a&gt; 目录&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;1.Module 1 - Introduction to RNA sequencing&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTEvMTcvUk5Bc2VxKDEpLw==&#34;&gt;Installation&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTEvMjgvUk5Bc2VxKDIpLw==&#34;&gt;Reference Genomes&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDEvUk5Bc2VxKDMpLw==&#34;&gt;Annotations&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDMvUk5Bc2VxKDQpLw==&#34;&gt;Indexing&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDUvUk5Bc2VxKDUpLw==&#34;&gt;RNA-seq Data&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMDgvUk5Bc2VxKDYpLw==&#34;&gt;Pre-Alignment QC&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;2.Module 2 - RNA-seq Alignment and Visualization&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTAvUk5Bc2VxKDcpLw==&#34;&gt;Adapter Trim&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTIvUk5Bc2VxKDgpLw==&#34;&gt;Alignment&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTUvUk5Bc2VxKDkpLw==&#34;&gt;IGV&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTcvUk5Bc2VxKDEwKS8=&#34;&gt;Alignment Visualization&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMTkvUk5Bc2VxKDExKS8=&#34;&gt;Alignment QC&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;3.Module 3 - Expression and Differential Expression&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjIvUk5Bc2VxKDEyKS8=&#34;&gt;Expression&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjQvUk5Bc2VxKDEzKS8=&#34;&gt;Differential Expression&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjYvUk5Bc2VxKDE0KS8=&#34;&gt;DE Visualization&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMjkvUk5Bc2VxKDE1KS8=&#34;&gt;Kallisto for Reference-Free Abundance Estimation&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;4.Module 4 - Isoform Discovery and Alternative Expression&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjAvMTIvMzEvUk5Bc2VxKDE2KS8=&#34;&gt;Reference Guided Transcript Assembly&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDIvUk5Bc2VxKDE3KS8=&#34;&gt;de novo Transcript Assembly&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDUvUk5Bc2VxKDE4KS8=&#34;&gt;Transcript Assembly Merge&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDcvUk5Bc2VxKDE5KS8=&#34;&gt;Differential Splicing&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMDkvUk5Bc2VxKDIwKS8=&#34;&gt;Splicing Visualization&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;5.Module 5 - De novo transcript reconstruction&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMTIvUk5Bc2VxKDIxKS8=&#34;&gt;De novo RNA-Seq Assembly and Analysis Using Trinity&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;6.Module 6 - Functional Annotation of Transcripts&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cHM6Ly93d3cuemhvdXhpYW96aGFvLmNuLzIwMjEvMDEvMTQvUk5Bc2VxKDIyKS8=&#34;&gt;Functional Annotation of Assembled Transcripts Using Trinotate&lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;16-pre-alignment-qc&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#16-pre-alignment-qc&#34;&gt;#&lt;/a&gt; 1.6 Pre-Alignment QC&lt;/h2&gt;
-&lt;p&gt;在对齐之前，你可以使用 FastQC 来确定你的数据质量:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cDovL3d3dy5iaW9pbmZvcm1hdGljcy5iYWJyYWhhbS5hYy51ay9wcm9qZWN0cy9mYXN0cWMv&#34;&gt;http://www.bioinformatics.babraham.ac.uk/projects/fastqc/&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;还有一个视频教程&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;exturl&#34; data-url=&#34;aHR0cDovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PWJ6OTNSZU92ODdZ&#34;&gt;http://www.youtube.com/watch?v=bz93ReOv87Y&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;尝试在 fastq 文件上运行 FastQC:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fastqc *.fastq.gz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;查看一下结果&lt;/p&gt;
-&lt;p&gt;HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1_fastqc.html&lt;/p&gt;
-&lt;p&gt;&lt;img data-src=&#34;/img/posts/2020.11.08/image-20201223161027255.png&#34; alt=&#34;image-20201223161027255&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;练习4&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#练习4&#34;&gt;#&lt;/a&gt; 练习 4&lt;/h2&gt;
-&lt;p&gt;作业：在前面的实践练习中下载的其他 fastq 文件中运行 FASTQC。&lt;/p&gt;
-&lt;p&gt;提示：请记住，将这些数据存储在一个名为 “practice” 的独立工作目录中。&lt;/p&gt;
-&lt;p&gt;在文件 hcc1395_normal_1.fastq 上运行 FASTQC。并通过检查输出来回答这些问题。&lt;/p&gt;
-&lt;p&gt;问题&lt;/p&gt;
-&lt;p&gt;How many total sequences are there? 331,958&lt;/p&gt;
-&lt;p&gt;What is the range (x - y) of read lengths observed? 151&lt;/p&gt;
-&lt;p&gt;What is the most common average sequence quality score? 41&lt;/p&gt;
-&lt;p&gt;What does the Adaptor Content warning tell us? 有一些证据表明，Illumina 接头在 reads 的 3&#39; 端。这表明去除对于该数据来说可能是必须的。&lt;/p&gt;
-</content>
-        <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
-        <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
-        <category term="RNAseq" scheme="https://www.zhouxiaozhao.cn/tags/RNAseq/" />
-        <updated>2020-12-08T10:38:45.000Z</updated>
     </entry>
 </feed>

@@ -11381,6 +11381,173 @@ ggsave(&quot;featureplot/SCTSlide1.pdf&quot;, plot = pearplot, width = 18, heigh
       </tags>
   </entry>
   <entry>
+    <title>植物空间转录组分析2：STEEL+Seurat</title>
+    <url>/2023/02/24/2023-02-24-ST(2)/</url>
+    <content><![CDATA[<p>本文将继续使用兰花空间转录组的数据，同时运用文献中提到的 STEEL 聚类方法进行分析，该方法也是由戚继团队开发的，看文章感觉聚类效果不错。<br>
+<img data-src="/img/posts/2023.2.24/1.png" alt="聚类比较"></p>
+<p>目前该文章还未被接收，大家可以先用下软件，主要能提供聚类信息和每个聚类的 marker 基因，但个人认为可视化方面还有所欠缺，所以这个教程将结合 STEEL 的聚类方法与 Seurat 的可视化函数来完整复现文章的聚类图和拟时图</p>
+<h1 id="steel聚类分析"><a class="anchor" href="#steel聚类分析">#</a> STEEL 聚类分析</h1>
+<p>软件下载<span class="exturl" data-url="aHR0cHM6Ly9zdGVlbC1zdC5zb3VyY2Vmb3JnZS5pby8="> STEEL (sourceforge.io)</span><br>
+ 使用说明<br>
+<img data-src="/img/posts/2023.2.24/2.png" alt="image.png"><br>
+ 主要的参数就是 <strong>--beads</strong> <strong>--genes</strong> <strong>--pca</strong> <strong>--group</strong></p>
+<pre><code class="language-bash"> ./steel filtered_feature_bc_matrix  spatial/tissue_positions_list.csv --pca=20  pca20out
+</code></pre>
+<p>输出结果<br>
+<img data-src="/img/posts/2023.2.24/3.png" alt="steel"><br>
+genes 文件里面包含的就是聚类特异基因，map 文件就是聚类信息，我们使用<strong> pca20out.map.40</strong> 的聚类信息进行后续的分析</p>
+<h1 id="seurat聚类图"><a class="anchor" href="#seurat聚类图">#</a> Seurat 聚类图</h1>
+<p>使用 Seurat 读取原始的数据，并将 STEEL 聚类信息读入</p>
+<pre><code class="language-r">library(Seurat)
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+library(cowplot)
+library(gtools)
+library(stringr)
+library(Matrix)
+library(tidyverse)
+library(patchwork)
+orc1&lt;- Load10X_Spatial(&quot;Slide_1&quot;)
+## 直接导入STEEL的聚类信息
+STEEL&lt;- read.delim(&quot;STEEL/Slide1.map.40&quot;,row.names = 1)
+orc1[[&quot;seurat_clusters&quot;]] &lt;- NA
+
+clusters&lt;-data.frame(STEEL$Cluster)
+rownames(clusters) &lt;- rownames(STEEL)
+orc1[[&quot;seurat_clusters&quot;]][rownames(clusters),] &lt;- clusters
+## 去除NA值只保留有聚类的
+orc1_new &lt;- orc1[,rownames(clusters)]
+Idents(orc1_new) &lt;- 'seurat_clusters'
+Idents(orc1_new) &lt;- factor(Idents(orc1_new),levels=mixedsort(levels(Idents(orc1_new))))
+</code></pre>
+<p>接下来就是利用<strong> SpatialDimPlot</strong> 绘制聚类图了</p>
+<pre><code class="language-r">orc1_new &lt;- SCTransform(orc1_new, assay = &quot;Spatial&quot;, return.only.var.genes = FALSE, verbose = FALSE)
+orc1_new &lt;- RunPCA(orc1_new, features = VariableFeatures(orc1_new)) 
+orc1_new &lt;- RunTSNE(orc1_new, dims = 1:20)
+p1 &lt;- DimPlot(orc1_new, reduction = &quot;tsne&quot;, label = TRUE)
+p2 &lt;- SpatialDimPlot(orc1_new, group.by = &quot;seurat_clusters&quot;,label.size = 3, pt.size.factor = 1.3)
+pearplot &lt;- plot_grid(p1,p2)
+ggsave(&quot;STEEL/tsne_Slide1_40.pdf&quot;, plot = pearplot, width = 6, height = 6)
+</code></pre>
+<p><img data-src="/img/posts/2023.2.24/4.png" alt="聚类信息"><br>
+这个结果其实已经和原文一模一样了，就是颜色不对应<br>
+<img data-src="/img/posts/2023.2.24/5.png" alt="原文"><br>
+单看某个聚类对应关系，完全一致</p>
+<pre><code class="language-r">p1&lt;- SpatialDimPlot(orc1_new, cells.highlight = CellsByIdentities(object = orc1_new, idents = c(1:40)), facet.highlight = TRUE, ncol = 5)
+ggsave(&quot;STEEL/cluster_Slide1all.pdf&quot;, plot = p1, width = 19, height = 12)
+</code></pre>
+<p><img data-src="/img/posts/2023.2.24/6.png" alt="聚类对应"><br>
+对应好聚类关系接下就是拟时分析了</p>
+<h1 id="拟时分析"><a class="anchor" href="#拟时分析">#</a> 拟时分析</h1>
+<p>在文章中做了两次拟时分析，本次分析只以 Fig2 的组织进行分析，其他的大家也可以自尝试</p>
+<pre><code class="language-r">library(monocle)
+subdata &lt;- subset(orc1_new, idents = c(19,21,37,38,39,40))
+
+#选择要分析的亚群
+expression_matrix = subdata@assays$Spatial@counts
+cell_metadata &lt;- data.frame(group = subdata[['orig.ident']],clusters = Idents(subdata))
+gene_annotation &lt;- data.frame(gene_short_name = rownames(expression_matrix), stringsAsFactors = F) 
+rownames(gene_annotation) &lt;- rownames(expression_matrix)
+pd &lt;- new(&quot;AnnotatedDataFrame&quot;, data = cell_metadata)
+fd &lt;- new(&quot;AnnotatedDataFrame&quot;, data = gene_annotation)
+HSMM &lt;- newCellDataSet(expression_matrix,
+                       phenoData = pd,
+                       featureData = fd,
+                       expressionFamily=negbinomial.size())
+HSMM &lt;- detectGenes(HSMM,min_expr = 0.1)
+HSMM_myo &lt;- estimateSizeFactors(HSMM)
+HSMM_myo &lt;- estimateDispersions(HSMM_myo)
+disp_table &lt;- dispersionTable(HSMM_myo)
+disp.genes &lt;- subset(disp_table, mean_expression &gt;= 0.1 )
+disp.genes &lt;- as.character(disp.genes$gene_id)
+
+HSMM_myo &lt;- reduceDimension(HSMM_myo, max_components = 2, method = 'DDRTree')
+
+HSMM_myo &lt;-orderCells(HSMM_myo,reverse = T)
+#State轨迹分布图
+plot1 &lt;- plot_cell_trajectory(HSMM_myo, color_by = &quot;State&quot;)
+##Cluster轨迹分布图
+plot2 &lt;- plot_cell_trajectory(HSMM_myo, color_by = &quot;clusters&quot;)
+##Pseudotime轨迹图
+plot3 &lt;- plot_cell_trajectory(HSMM_myo, color_by = &quot;Pseudotime&quot;)
+plotc &lt;- plot1|plot2|plot3
+ggsave(&quot;STEEL/Combination1.pdf&quot;, plot = plotc, width = 18, height = 6.2)
+
+#绘制拟时间
+cell_Pseudotime &lt;- data.frame(pData(HSMM_myo)$Pseudotime)
+rownames(cell_Pseudotime) &lt;- rownames(cell_metadata) 
+#把拟时间对应到到组织切片位置上
+orc1_new[['Pseudotime']] &lt;- NA
+orc1_new[['Pseudotime']][rownames(cell_Pseudotime),] &lt;- cell_Pseudotime
+p1 &lt;- SpatialFeaturePlot(orc1_new, features = c(&quot;Pseudotime&quot;),pt.size.factor = 1.3)
+ggsave(&quot;STEEL/pseudotime_feature1.pdf&quot;, plot = p1, width = 8, height = 9)
+</code></pre>
+<p>主要的亮点就在于可以把拟时结果体现在我们的组织切片上，这样我们在<strong> orderCells</strong> 这一步可以更加方便的判断每个 spot 的拟时间<br>
+<img data-src="/img/posts/2023.2.24/7.png" alt="拟时间结果"><br>
+<img data-src="/img/posts/2023.2.24/8.png" alt="正文结果"><br>
+<img data-src="/img/posts/2023.2.24/29.png" alt="体现在切片上"><br>
+可以看到和文章里的是一模一样的，接下来就是复现文章中的基因拟时分布和 BEAM 结果</p>
+<pre><code class="language-r">data_subset &lt;- HSMM_myo['PAXXG054350',]
+p1&lt;-plot_genes_in_pseudotime(data_subset, color_by = &quot;clusters&quot;)
+
+data_subset &lt;- HSMM_myo['PAXXG051950',]
+p2&lt;-plot_genes_in_pseudotime(data_subset, color_by = &quot;clusters&quot;)
+
+data_subset &lt;- HSMM_myo['PAXXG086750',]
+p3&lt;-plot_genes_in_pseudotime(data_subset, color_by = &quot;clusters&quot;)
+
+data_subset &lt;- HSMM_myo['PAXXG345890',]
+p4&lt;-plot_genes_in_pseudotime(data_subset, color_by = &quot;clusters&quot;)
+
+data_subset &lt;- HSMM_myo['PAXXG010560',]
+p5&lt;-plot_genes_in_pseudotime(data_subset, color_by = &quot;clusters&quot;)
+
+data_subset &lt;- HSMM_myo['PAXXG074500',]
+p6&lt;-plot_genes_in_pseudotime(data_subset, color_by = &quot;clusters&quot;) #color_by可以换成state或者pseudotime
+pearplot &lt;- plot_grid(p1,p2,p3,p4,p5,p6,align = &quot;v&quot;,axis = &quot;b&quot;,ncol = 1)
+ggsave(&quot;STEEL/gene_pseudotime1.pdf&quot;, plot = pearplot, width = 5, height = 15)
+
+#拟时相关基因聚类热图   
+disp_table &lt;- dispersionTable(HSMM_myo)
+disp.genes &lt;- subset(disp_table, mean_expression &gt;= 0.5&amp;dispersion_empirical &gt;= 1*dispersion_fit)
+disp.genes &lt;- as.character(disp.genes$gene_id)
+mycds_sub &lt;- HSMM_myo[disp.genes,]
+diff_test &lt;- differentialGeneTest(HSMM_myo[disp.genes,], cores = 4, 
+                                  fullModelFormulaStr = &quot;~sm.ns(Pseudotime)&quot;)
+sig_gene_names &lt;- row.names(subset(diff_test, qval &lt; 1e-04))
+p2 = plot_pseudotime_heatmap(HSMM_myo[sig_gene_names,], num_clusters=6,
+                             show_rownames=F, return_heatmap=T)
+ggsave(&quot;STEEL/pseudotime_heatmap1.pdf&quot;, plot = p2, width = 5, height = 10)
+## BEAM分析
+my_pseudotime_de &lt;- differentialGeneTest(HSMM_myo, cores = 5)
+
+BEAM_res &lt;- BEAM(HSMM_myo, branch_point = 1, cores = 4)
+
+BEAM_res &lt;- BEAM_res[order(BEAM_res$qval),]
+BEAM_res &lt;- BEAM_res[,c(&quot;gene_short_name&quot;, &quot;pval&quot;, &quot;qval&quot;)]
+
+mycds_sub_beam &lt;- HSMM_myo[row.names(subset(BEAM_res, qval &lt; 1e-4)),]
+pdf(&quot;STEEL/BEAM1.pdf&quot;, width = 8, height = 12)
+plot_genes_branched_heatmap(mycds_sub_beam, branch_point = 1, num_clusters = 6, cores = 4,show_rownames = FALSE)
+dev.off()
+</code></pre>
+<p>可以看到 BEAM 不太相同，但除了这个以外其他的都是完全一致，这次分析达到了文章中的效果，比较满意</p>
+<p><img data-src="/img/posts/2023.2.24/10.png" alt="pseudotime"><br>
+<img data-src="/img/posts/2023.2.24/11.png" alt="BEAM"></p>
+<p>#总结<br>
+目前植物空间转录组刚刚起步，相信今年会有很多文章出现，到时候主要就是看创新点在哪，能解决什么问题</p>
+]]></content>
+      <categories>
+        <category>生信学习</category>
+        <category>单细胞</category>
+      </categories>
+      <tags>
+        <tag>bioinformatics</tag>
+        <tag>spatial_transcriptome</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>关于我</title>
     <url>/about/index.html</url>
     <content><![CDATA[<h4 id="hello我是周小钊目前在昆明植物研究所学习一位快要秃头的研究生生信小菜鸟主要分享一些自己的学习过程预防遗忘也欢迎大家一起来学习交流"><a class="anchor" href="#hello我是周小钊目前在昆明植物研究所学习一位快要秃头的研究生生信小菜鸟主要分享一些自己的学习过程预防遗忘也欢迎大家一起来学习交流">#</a> Hello, 我是周小钊，目前在昆明植物研究所学习，一位快要秃头的研究生，生信小菜鸟，主要分享一些自己的学习过程，预防遗忘，也欢迎大家一起来学习交流。</h4>
