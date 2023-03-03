@@ -11404,7 +11404,8 @@ dev.off()
 ]]></content>
       <categories>
         <category>生信学习</category>
-        <category>单细胞，空间转录组</category>
+        <category>单细胞</category>
+        <category>空间转录组</category>
       </categories>
       <tags>
         <tag>bioinformatics</tag>

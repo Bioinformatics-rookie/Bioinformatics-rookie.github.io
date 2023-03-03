@@ -18,7 +18,8 @@
             <title>植物空间转录组分析2：STEEL+Seurat</title>
             <link>https://www.zhouxiaozhao.cn/2023/02/24/2023-02-24-ST(2)/</link>
             <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
-            <category term="单细胞，空间转录组" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/%E5%8D%95%E7%BB%86%E8%83%9E%EF%BC%8C%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%BB%84/" />
+            <category term="单细胞" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/SingleCell/" />
+            <category term="空间转录组" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/SingleCell/%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%BB%84/" />
             <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
             <category term="spatial_transcriptome" scheme="https://www.zhouxiaozhao.cn/tags/spatial-transcriptome/" />
             <pubDate>Fri, 24 Feb 2023 00:00:00 +0800</pubDate>

@@ -170,7 +170,8 @@ dev.off()
 目前植物空间转录组刚刚起步，相信今年会有很多文章出现，到时候主要就是看创新点在哪，能解决什么问题&lt;/p&gt;
 </content>
         <category term="生信学习" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/" />
-        <category term="单细胞，空间转录组" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/%E5%8D%95%E7%BB%86%E8%83%9E%EF%BC%8C%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%BB%84/" />
+        <category term="单细胞" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/SingleCell/" />
+        <category term="空间转录组" scheme="https://www.zhouxiaozhao.cn/categories/Bioinformation/SingleCell/%E7%A9%BA%E9%97%B4%E8%BD%AC%E5%BD%95%E7%BB%84/" />
         <category term="bioinformatics" scheme="https://www.zhouxiaozhao.cn/tags/bioinformatics/" />
         <category term="spatial_transcriptome" scheme="https://www.zhouxiaozhao.cn/tags/spatial-transcriptome/" />
         <updated>2023-02-23T16:00:00.000Z</updated>
