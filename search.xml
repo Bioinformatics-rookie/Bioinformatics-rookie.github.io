@@ -11456,14 +11456,114 @@ dev.off()
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>AIpainting</title>
+    <title>AI绘画</title>
     <url>/AIpainting/index.html</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="前言"><a class="anchor" href="#前言">#</a> 前言</h1>
+<p>本页面基本就是相当于我的学习日记，在 AI 学习页面中安装了 webUI 一些模型，接下来就是自己的慢慢探索</p>
+<h1 id="扩展安装"><a class="anchor" href="#扩展安装">#</a> 扩展安装</h1>
+<p>点击 “Extensions”, 可以安装一些扩展<br>
+<img data-src="/img/posts/AIpainting/1.png" alt title="扩展安装界面"><br>
+目前我已安装了如下扩展，可以将这些网址分别复制点击从网址安装，主要包括了 controlnet，汉化，中文 tag 补齐，UP scale (画质优化)<br>
+<span class="exturl" data-url="aHR0cHM6Ly9qaWh1bGFiLmNvbS9odW50ZXIwNzI1L2ExMTExLXNkLXdlYnVpLXRhZ2NvbXBsZXRl">https://jihulab.com/hunter0725/a1111-sd-webui-tagcomplete</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9qaWh1bGFiLmNvbS9odW50ZXIwNzI1L3NkLXdlYnVpLWFkZGl0aW9uYWwtbmV0d29ya3MuZ2l0">https://jihulab.com/hunter0725/sd-webui-additional-networks.git</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9naHByb3h5LmNvbS9odHRwczovL2dpdGh1Yi5jb20vam91cm5leS1hZC9zZC13ZWJ1aS1iaWxpbmd1YWwtbG9jYWxpemF0aW9uLmdpdA==">https://ghproxy.com/https://github.com/journey-ad/sd-webui-bilingual-localization.git</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9naHByb3h5LmNvbS9odHRwczovL2dpdGh1Yi5jb20vTWlrdWJpbGwvc2Qtd2VidWktY29udHJvbG5ldC5naXQ=">https://ghproxy.com/https://github.com/Mikubill/sd-webui-controlnet.git</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9qaWh1bGFiLmNvbS9odW50ZXIwNzI1L3N0YWJsZS1kaWZmdXNpb24td2VidWktbG9jYWxpemF0aW9uLXpoX0NO">https://jihulab.com/hunter0725/stable-diffusion-webui-localization-zh_CN</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9naHByb3h5LmNvbS9odHRwczovL2dpdGh1Yi5jb20vQ295b3RlLUEvdWx0aW1hdGUtdXBzY2FsZS1mb3ItYXV0b21hdGljMTExMS5naXQ=">https://ghproxy.com/https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git</span></p>
+<h1 id="模型相关研究"><a class="anchor" href="#模型相关研究">#</a> 模型相关研究</h1>
+<p>本节主要是不同模型的探讨</p>
+<h2 id="初步试验"><a class="anchor" href="#初步试验">#</a> 初步试验</h2>
+<p>本小节主要是看一下不同模型之间的区别<br>
+在指令之前，需要改一个地方<br>
+<ins class="dot"> webUI 的 tag 权重是 (), 代表强化 1.1，naifu 的是 {}, 强化 1.05，所以我们在其他网站找到了现成指令有的时候是 (), 有的时候是 {}, 那么我们可以修改 modules/sd_hijack_clip.py, 加上 {} 的权重</ins><br>
+<img data-src="/img/posts/AIpainting/2.png" alt title="代码修改"><br>
+我们可以在 https://huggingface.co/ 和 https://civitai.com/ 下载想要的模型，需要注意，一般模型的大小都会大于 1G 左右，大小不够的一般是 Lora 了，下载好的模型放到 models/Stable-diffusion 下即可加载<br>
+<img data-src="/img/posts/AIpainting/3.png" alt title="所有模型"><br>
+首先让我们试一下<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnFxLmNvbS9kb2MvRFdIbDNhbTVaYjA1UWJHVnM=">元素法典</span>的冰系改<br>
+正面 tag</p>
+<pre><code>(((masterpiece))),best quality, illustration,(beautiful detailed girl),beautiful detailed glow,detailed ice,beautiful detailed water,(beautiful detailed eyes),expressionless,beautiful detailed white gloves, (floating palaces:1.2),azure hair,disheveled hair,long bangs, hairs between eyes, (skyblue dress),black ribbon,white bowties,midriff,&#123;&#123;&#123;half closed eyes&#125;&#125;&#125;,,big forhead,blank stare,flower,large top sleeves,(((ice crystal texture wings))),&#123;&#123;&#123;&#123;&#123;&#123;&#123;Iridescence and rainbow hair:2.5&#125;&#125;&#125;&#125;&#125;&#125;&#125;,&#123;&#123;&#123;&#123;&#123;&#123;detailed cute anime face&#125;&#125;&#125;&#125;&#125;&#125;,&#123;&#123;loli&#125;&#125;,&#123;&#123;&#123;&#123;watercolor_(medium)&#125;&#125;&#125;&#125;,(((masterpiece)))
+</code></pre>
+<p>反面 tag：</p>
+<pre><code>&#123;&#123;&#123;ugly&#125;&#125;&#125;,&#123;&#123;&#123;duplicate&#125;&#125;&#125;,&#123;&#123;morbid&#125;&#125;,&#123;&#123;mutilated&#125;&#125;,&#123;&#123;&#123;tranny&#125;&#125;&#125;,mutated hands,&#123;&#123;&#123;poorly drawn hands&#125;&#125;&#125;,blurry,&#123;&#123;bad anatomy&#125;&#125;,&#123;&#123;&#123;bad proportions&#125;&#125;&#125;,extra limbs,cloned face,&#123;&#123;&#123;disfigured&#125;&#125;&#125;,&#123;&#123;&#123;more than 2 nipples&#125;&#125;&#125;,&#123;&#123;&#123;&#123;missing arms&#125;&#125;&#125;&#125;,&#123;&#123;&#123;extra legs&#125;&#125;&#125;,mutated hands,&#123;&#123;&#123;&#123;&#123;fused fingers&#125;&#125;&#125;&#125;&#125;,&#123;&#123;&#123;&#123;&#123;too many fingers&#125;&#125;&#125;&#125;&#125;,&#123;&#123;&#123;unclear eyes&#125;&#125;&#125;,lowers,bad anatomy,bad hands,text,error,missing fingers,extra digit,fewer digits,cropped,worst quality,low quality,normal quality,jpeg artifacts,signature,watermark,username,blurry,bad
+</code></pre>
+<p>使用 anythingV4.5 (动漫类)<br>
+<img data-src="/img/posts/AIpainting/4.jpg" alt title="anythingV4.5"></p>
+<p>anythingV3 (动漫类)<br>
+<img data-src="/img/posts/AIpainting/5.png" alt title="anythingV3"></p>
+<p>AOM3A3 (油画 + 动漫)<br>
+<img data-src="/img/posts/AIpainting/6.png" alt title="AOM3A3"></p>
+<p>Basil_mix_fixxed(2.5D)<br>
+<img data-src="/img/posts/AIpainting/7.png" alt title="Basil_mix_fixxed"></p>
+<p>chilloutmixNI(3D)<br>
+<img data-src="/img/posts/AIpainting/8.png" alt title="chilloutmixNI"></p>
+<p>个人感觉二次元画风 AnythingV3 的看起来最舒服</p>
+<h2 id="lora使用方法"><a class="anchor" href="#lora使用方法">#</a> Lora 使用方法</h2>
+<p>LoRA 是一种微调模型，可以让我们生成某些特定角色，非常实用，一般后缀为 pt (或者 safetensors)，一般为几十 M 或者一两百 M<br>
+ 首先我们在 https://civitai.com/ 上下载想要的模型，还有个最常用的<em> koreanDollLikeness</em></p>
+<p class="gallery" data-height="500"><img data-src="/img/posts/AIpainting/9.png" alt title="八重神子"><br>
+<img data-src="/img/posts/AIpainting/10.png" alt title="洛琪希"></p>
+<p>下载好的模型文献放到 models/Lora 文件夹下，在 generate 下方有个红色按钮点击之后即可使用，就会看到正面 tag 出现一个 &lt;&gt; 的关键词，<span class="exturl" data-url="bG9yYTp5YWVNaWtvUmVhbGlzdGljX3lhZW1pa29NaXhlZDox">lora:yaeMikoRealistic_yaemikoMixed:1</span>， 这个 1 代表的是权重，可以从 0 开始<br>
+<img data-src="/img/posts/AIpainting/11.png" alt title="操作方法"></p>
+<p>然后我们可以用 webui 的图片信息查看功能将网站上的图片拖进去查看关键词以及模型<br>
+<img data-src="/img/posts/AIpainting/12.png" alt title="操作方法"></p>
+<p>或者可以试试我这边的右图</p>
+<p class="gallery" data-height="500"><img data-src="/img/posts/AIpainting/13.png" alt title="八重神子"><br>
+<img data-src="/img/posts/AIpainting/14.png" alt title="八重神子"></p>
+<p>也可以多个 Lora 模型一起使用，下图是加了 0.3 权重的<em> koreanDollLikeness</em></p>
+<p><img data-src="/img/posts/AIpainting/15.png" alt title="八重神子"></p>
+]]></content>
   </entry>
   <entry>
-    <title>webstack</title>
+    <title>AI学习书签</title>
     <url>/webstack/index.html</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="概述"><a class="anchor" href="#概述">#</a> 概述</h1>
+<p>此界面主要是分享自己在学习 AI 的过程收藏的书签，目前 AI 绘画和 ChatGPT 进步飞速，感觉不学一点就要跟不上时代了</p>
+<h1 id="ai绘画"><a class="anchor" href="#ai绘画">#</a> AI 绘画</h1>
+<h2 id="安装方法"><a class="anchor" href="#安装方法">#</a> 安装方法</h2>
+<p>目前 AI 绘画有很多平台可以使用，推荐<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0FVVE9NQVRJQzExMTEvc3RhYmxlLWRpZmZ1c2lvbi13ZWJ1aQ=="> stable-diffusion-webui</span>。<br>
+然后我们下载<span class="exturl" data-url="aHR0cHM6Ly9zcGFjZS5iaWxpYmlsaS5jb20vMTI1NjYxMDE/c3BtX2lkX2Zyb209MzMzLjMzNy4wLjA=">秋葉 aaaki</span> 制作的<span class="exturl" data-url="aHR0cHM6Ly9wYW4uYmFpZHUuY29tL3MvMVhIT3g3emdPMElRVkwtMDFvcHdYakE/cHdkPXV2ZHk=">一键端</span>启动。将其复制到 webui 的根目录下启动即可。<br>
+<img data-src="/img/posts/webstack/1.png" alt="启动器"></p>
+<h2 id="模型下载"><a class="anchor" href="#模型下载">#</a> 模型下载</h2>
+<p>推荐两个网址<br>
+<span class="exturl" data-url="aHR0cHM6Ly9jaXZpdGFpLmNvbS8="> civitai</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby8=">huggingface</span><br>
+ 推荐先下载 ChilloutMix 和 Anything V3，比较泛用的三次元和二次元模型，都可以在 civiltai 上下载的<br>
+ controlnet 的模型可以在 huggingface 中找到</p>
+<h2 id="初步尝试"><a class="anchor" href="#初步尝试">#</a> 初步尝试</h2>
+<p>首先生成一张二次元 (Anything V3) 图片，界面左上角为模型选择<br>
+<img data-src="/img/posts/webstack/2.png" alt="界面"><br>
+具体参数<br>
+提示词</p>
+<pre><code>(((extremely detailed CG))), (((8k wallpaper))),(((masterpiece))),((best quality)),((best resolution illustration)),&#123;(solo)&#125;,hyper detailed,highres,&#123;solo&#125;,&#123;1 extremely detailed girl&#125;,beautiful detailed glow,((beautiful detailed blue eyes)),&#123;elaina (majo no tabitabi) &#125;, black robe, silver hair, long hair, braid, smile,&#123;&#123;black skirt&#125;&#125;, [white shirt], frilled shirt,witch,black witch hat,(yellow ribbon), purple eyes , atelier(series),(white pantyhose),(no shoes),&#123;(Surrounded by Purple vine)&#125;,&#123;(beautiful detailed garden)&#125;,crossed legs+from bottom,
+</code></pre>
+<p>负面提示词</p>
+<pre><code>Inverted mountain, low-quality, distorted mountain, distorted light, low-quality light, low-quality mountain,multiple breasts, (mutated hands and fingers:1.5 ), (long body :1.3), (mutation, poorly drawn :1.2) , black-white, bad anatomy, liquid body, liquid tongue, disfigured, malformed, mutated, anatomical nonsense, text font ui, error, (((malformed hands))), (((long neck))), blurred, lowers, lowres, bad anatomy, bad proportions, bad shadow, (((uncoordinated body))),(((unnatural body))), fused breasts, bad breasts, huge breasts, poorly drawn breasts, extra breasts, liquid breasts, heavy breasts, missing breasts, huge haunch, huge thighs, huge calf,bad hands, fused hand, missing hand, disappearing arms, disappearing thigh, disappearing calf, disappearing legs, fused ears, bad ears, poorly drawn ears, extra ears, liquid ears, heavy ears, missing ears, fused animal ears, bad animal ears, poorly drawn animal ears, extra animal ears, liquid animal ears, heavy animal ears, missing animal ears, text, ui, error, (((uncoordinated hands))),(((unnatural hands))),(((missing fingers))), (((missing limb))), (((fused fingers))), (((one hand with more than 5 fingers))), (((one hand with less than 5 fingers))), (((one hand with more than 5 digit))), (((one hand with less than 5 digit))), (((extra digit))), (((fewer digits))), (((fused digit))), (((missing digit))), (((bad digit))), (((liquid digit))), colorful tongue, black tongue, cropped, watermark, username, blurry, JPEG artifacts, signature, 3D, 3D game, 3D game scene, 3D character, malformed feet, extra feet, bad feet, poorly drawn feet, fused feet, missing feet, extra shoes, bad shoes, fused shoes, more than two shoes, poorly drawn shoes, bad gloves, poorly drawn gloves, fused gloves, bad cum, poorly drawn cum, fused cum, (((bad hairs))), (((poorly drawn hairs))), (((fused hairs))), big muscles, ugly, bad face, fused face, poorly drawn face, cloned face, big face, long face, bad eyes, fused eyes poorly drawn eyes, extra eyes, malformed limbs, more than 2 nipples, missing nipples, different nipples, fused nipples, bad nipples, poorly drawn nipples, black nipples, colorful nipples, gross proportions. short arm, (((missing arms))), missing thighs, missing calf, missing legs, mutation, duplicate, morbid, mutilated, (((poorly drawn hands))), (((more than 1 left hand))), (((more than 1 right hand))), deformed, (blurry), disfigured, missing legs, (((uncoordinated arms))),(((unnatural arms))),(((bad arms))),(((liquid arms))),(((strong arms))),(((extra arms))),(((more than 2 arms))), extra thighs, more than 2 thighs, extra calf, fused calf, extra legs, bad knee, extra knee, more than 2 legs, bad tails, bad mouth, fused mouth, poorly drawn mouth, bad tongue, tongue within mouth, too long tongue, black tongue, big mouth, cracked mouth, bad mouth, dirty face, dirty teeth, dirty pantie, fused pantie, poorly drawn pantie, fused cloth, poorly drawn cloth, bad pantie, yellow teeth, thick lips, bad cameltoe, colorful cameltoe, bad asshole, poorly drawn asshole, fused asshole, missing asshole, bad anus, bad pussy, bad crotch, bad crotch seam, fused anus, fused pussy, fused anus, fused crotch, poorly drawn crotch, fused seam, poorly drawn anus, poorly drawn pussy, poorly drawn crotch, poorly drawn crotch seam, bad thigh gap, missing thigh gap, fused thigh gap, liquid thigh gap, poorly drawn thigh gap, poorly drawn anus, bad collarbone, fused collarbone, missing collarbone, liquid collarbone, strong girl, obesity, worst quality, low quality, normal quality, liquid tentacles, bad tentacles, poorly drawn tentacles, split tentacles, fused tentacles, missing clit, bad clit, fused clit, colorful clit, black clit, liquid clit, QR code, bar code, censored, safety panties, safety knickers, beard, furry ,pony, pubic hair, mosaic, excrement, faeces, shit, futa, testis
+</code></pre>
+<p>其他参数</p>
+<pre><code>Steps: 20, Sampler: DPM++ SDE Karras, CFG scale: 7, Seed: 1724776434, Size: 984x512, Model hash: 812cd9f9d9, Model: anythingV3_fp16
+</code></pre>
+<p><img data-src="/img/posts/webstack/3.png" alt="效果图"><br>
+换成三次元模型<br>
+<img data-src="/img/posts/webstack/4.png" alt="效果图"><br>
+基本常识就到这了，其他的具体探索移步到 AI 绘画界面</p>
+<h2 id="网站推荐"><a class="anchor" href="#网站推荐">#</a> 网站推荐</h2>
+<p>下面是我自己整理的 AI 绘画网站，希望对大家有所帮助<br>
+<span class="exturl" data-url="aHR0cHM6Ly9ub3ZlbGFpLmRldi8="> https://novelai.dev/</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3JlYWQvY3YxOTEyMjUzNQ==">novel ai 搭建教程</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81NzQwMTcwNTU=">作品存档</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81NzQxMzExMjI=">傻瓜式教程</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly93d3cud3hjaGEuY29tL2dsLzc4OTMxLmh0bWw=">可用关键词一览</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnFxLmNvbS9kb2MvRFdIbDNhbTVaYjA1UWJHVnM=">元素法典</span><br>
+<span class="exturl" data-url="aHR0cDovL3RvbXhseXNwbGF5LmNvbS5jbi8jLw==">鳖哲法典</span><br>
+<span class="exturl" data-url="aHR0cDovL3dvbGZjaGVuLnRvcC90YWcv"> tag 在线生成器</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9haXRhZy50b3Av"> tag 词典</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9zcGVsbC5ub3ZlbGFpLmRldi8="> NovelAI 法术解析</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly93d3cua2RvY3MuY24vbC9jdmc4Y2NPR2o1c3E="> NovelAI 资源整合</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly90YWdzLm5vdmVsYWkuZGV2Lw==">标签超市</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vc3ByZWFkc2hlZXRzL2QvZS8yUEFDWC0xdlJhMkhqem9jYWpsc1BMSDFlNVFzSnVtbkVTaGZvb0RkZUhxY0F1eGpQS0JJVlZUSGJPWVdBU0FReWZtclFoVXRvWkFLUHJpMnNfdEd4eC9wdWJodG1sIw=="> googleNovelAI 法术书</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly9jb2xhYi5yZXNlYXJjaC5nb29nbGUuY29tL2RyaXZlLzFfTWE3MUw2dUdidHQ2VVF5QTNGanFXMmxjWjVCamNrLSNzY3JvbGxUbz11UUJSOXpYUUdKcm4="> naifu (google 云盘)</span><br>
+<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3JlYWQvY3YyMTM2MjIwMg=="> 模型总结</span></p>
+]]></content>
   </entry>
   <entry>
     <title>AIbookmark</title>
