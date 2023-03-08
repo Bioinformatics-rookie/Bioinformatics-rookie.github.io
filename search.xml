@@ -11438,7 +11438,15 @@ dev.off()
   <entry>
     <title>links</title>
     <url>/links/index.html</url>
-    <content><![CDATA[<p><div class="links"><div class="item" title="小黑" style="--block-color:#9d5b8b;"><span class="exturl image" data-url="aHR0cHM6Ly9qdW5nbGVibGFjazAwNy5naXRodWIuaW8v" data-background-image="https://img1.imgtp.com/2023/02/01/jqxxMqsY.png"></span>
+    <content><![CDATA[<p>可以申请友链，评论区提供如下格式</p>
+<pre><code class="language-yml">- site: #网站的名字
+  owner: #您的名字
+  url: #您的网址
+  desc: #简短描述
+  image: #一张图片
+  color: #方块颜色
+</code></pre>
+<p><div class="links"><div class="item" title="小黑" style="--block-color:#9d5b8b;"><span class="exturl image" data-url="aHR0cHM6Ly9qdW5nbGVibGFjazAwNy5naXRodWIuaW8v" data-background-image="https://img1.imgtp.com/2023/02/01/jqxxMqsY.png"></span>
           <div class="info">
           <span class="exturl title" data-url="aHR0cHM6Ly9qdW5nbGVibGFjazAwNy5naXRodWIuaW8v">Mushroom Monkey</span>
           <p class="desc">蘑菇摄影骨灰粉，喜欢帮大家鉴定蘑菇图片，要是有标本就更好了</p>
