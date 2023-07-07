@@ -5529,6 +5529,58 @@ genes 文件里面包含的就是聚类特异基因，map 文件就是聚类信�
       </tags>
   </entry>
   <entry>
+    <title>植物空间转录组分析3：hdWGCNA</title>
+    <url>/2023/07/07/2023-07-07-STWGCNA/</url>
+    <content><![CDATA[<h2 id="植物空间转录组分析1seurat基本流程"><a class="anchor" href="#植物空间转录组分析1seurat基本流程">#</a> <a href="https://www.zhouxiaozhao.cn/2023/02/22/2023-02-22-ST(1)/">植物空间转录组分析 1：Seurat 基本流程</a></h2>
+<h2 id="植物空间转录组分析2steelseurat"><a class="anchor" href="#植物空间转录组分析2steelseurat">#</a> <a href="https://www.zhouxiaozhao.cn/2023/02/24/2023-02-24-ST(2)/">植物空间转录组分析 2：STEEL+Seurat</a></h2>
+<h1 id="前言"><a class="anchor" href="#前言">#</a> 前言</h1>
+<p>时隔半年的更新，这次的主题是单细胞<span class="exturl" data-url="aHR0cHM6Ly93d3cuc2NpZW5jZWRpcmVjdC5jb20vc2NpZW5jZS9hcnRpY2xlL3BpaS9TMjY2NzIzNzUyMzAwMTI3Mz92aWElM0RpaHVi"> hdWGCNA</span> 分析，文章刚刚被接收，目前在植物空间转录组已经有<span class="exturl" data-url="aHR0cHM6Ly9kb2kub3JnLzEwLjEwOTMvbmFyL2drYWQ1MjE=">文章</span>使用了该方法，基本的内容就是分 module 然后去看每个 module 的 hub 基因，或者做做 GO 富集之类的<br>
+<img data-src="/img/posts/2023.7.7/1.png" alt="hdWGCNA"></p>
+<h1 id="r包安装以及数据准备"><a class="anchor" href="#r包安装以及数据准备">#</a> R 包安装以及数据准备</h1>
+<p>本次分析还是以兰花的空间转录组为基础，具体的数据参考以前的推文</p>
+<figure class="highlight raw"><figcaption data-lang><span>w</span></figcaption><table><tr><td data-num="1"></td><td><pre># install BiocManager</pre></td></tr><tr><td data-num="2"></td><td><pre>install.packages(&quot;BiocManager&quot;)</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre># install Bioconductor core packages</pre></td></tr><tr><td data-num="5"></td><td><pre>BiocManager::install()</pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre># install additional packages:</pre></td></tr><tr><td data-num="8"></td><td><pre>install.packages(c(&quot;Seurat&quot;, &quot;WGCNA&quot;, &quot;igraph&quot;, &quot;devtools&quot;))</pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre>devtools::install_github(&#39;smorabit&#x2F;hdWGCNA&#39;, ref&#x3D;&#39;dev&#39;)</pre></td></tr></table></figure><p>大家可能会因为网络问题无法下载，我直接将<span class="exturl" data-url="aHR0cHM6Ly9raWIyMDIyLnNoYXJlcG9pbnQuY29tLzpmOi9nL0VzZExadC1VdXNGSHRGNzJ2cTkyaUs0QmhreUtRYVFRemxueGJ0b0plbGtJZVE/ZT13S0VWZzc=">压缩包</span>发给大家</p>
+<figure class="highlight raw"><figcaption data-lang><span>w</span></figcaption><table><tr><td data-num="1"></td><td><pre>## 数据准备</pre></td></tr><tr><td data-num="2"></td><td><pre>## 将 spot 坐标信息加到 metadata 中</pre></td></tr><tr><td data-num="3"></td><td><pre># make a dataframe containing the image coordinates for each sample</pre></td></tr><tr><td data-num="4"></td><td><pre>image_df &lt;- do.call (rbind, lapply (names (orc1_new@images), function (x)&#123;</pre></td></tr><tr><td data-num="5"></td><td><pre>  orc1_new@images [[x]]@coordinates</pre></td></tr><tr><td data-num="6"></td><td><pre>&#125;))</pre></td></tr><tr><td data-num="7"></td><td><pre></pre></td></tr><tr><td data-num="8"></td><td><pre># merge the image_df with the Seurat metadata</pre></td></tr><tr><td data-num="9"></td><td><pre>new_meta &lt;- merge (orc1_new@meta.data, image_df, by&#x3D;&#39;row.names&#39;)</pre></td></tr><tr><td data-num="10"></td><td><pre></pre></td></tr><tr><td data-num="11"></td><td><pre># fix the row ordering to match the original seurat object</pre></td></tr><tr><td data-num="12"></td><td><pre>rownames (new_meta) &lt;- new_meta$Row.names</pre></td></tr><tr><td data-num="13"></td><td><pre>ix &lt;- match (as.character (colnames (orc1_new)), as.character (rownames (new_meta)))</pre></td></tr><tr><td data-num="14"></td><td><pre>new_meta &lt;- new_meta [ix,]</pre></td></tr><tr><td data-num="15"></td><td><pre></pre></td></tr><tr><td data-num="16"></td><td><pre># add the new metadata to the seurat object</pre></td></tr><tr><td data-num="17"></td><td><pre>orc1_new@meta.data &lt;- new_meta</pre></td></tr></table></figure><h2 id="构建metaspots"><a class="anchor" href="#构建metaspots">#</a> 构建 metaspots</h2>
+<figure class="highlight raw"><figcaption data-lang><span>w</span></figcaption><table><tr><td data-num="1"></td><td><pre>## Here we set up the data for hdWGCNA and run MetaspotsByGroups. </pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>subdata &lt;- subset(orc1_new, idents &#x3D; c(19,21,37,38,39,40))</pre></td></tr><tr><td data-num="4"></td><td><pre>subdata &lt;- SCTransform(subdata, assay &#x3D; &quot;Spatial&quot;, return.only.var.genes &#x3D; FALSE, verbose &#x3D; FALSE)</pre></td></tr><tr><td data-num="5"></td><td><pre>subdata &lt;- RunPCA(subdata, features &#x3D; VariableFeatures(subdata)) </pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>subdata &lt;- SetupForWGCNA(</pre></td></tr><tr><td data-num="8"></td><td><pre>  subdata,</pre></td></tr><tr><td data-num="9"></td><td><pre>  features &#x3D; VariableFeatures(subdata),</pre></td></tr><tr><td data-num="10"></td><td><pre>  wgcna_name &#x3D; &quot;SCT&quot;</pre></td></tr><tr><td data-num="11"></td><td><pre>)</pre></td></tr><tr><td data-num="12"></td><td><pre></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre>subdata &lt;- MetacellsByGroups(</pre></td></tr><tr><td data-num="15"></td><td><pre>  seurat_obj &#x3D; subdata,</pre></td></tr><tr><td data-num="16"></td><td><pre>  group.by &#x3D; c(&quot;seurat_clusters&quot;),</pre></td></tr><tr><td data-num="17"></td><td><pre>  k &#x3D; 5,</pre></td></tr><tr><td data-num="18"></td><td><pre>  max_shared&#x3D; 10,</pre></td></tr><tr><td data-num="19"></td><td><pre>  min_cells &#x3D; 6,</pre></td></tr><tr><td data-num="20"></td><td><pre>  reduction &#x3D; &#39;pca&#39;,</pre></td></tr><tr><td data-num="21"></td><td><pre>  ident.group &#x3D; &#39;seurat_clusters&#39;,</pre></td></tr><tr><td data-num="22"></td><td><pre>  slot &#x3D; &#39;scale.data&#39;,</pre></td></tr><tr><td data-num="23"></td><td><pre>  assay &#x3D; &#39;SCT&#39;</pre></td></tr><tr><td data-num="24"></td><td><pre>)</pre></td></tr><tr><td data-num="25"></td><td><pre>m_obj &lt;- GetMetacellObject(subdata)</pre></td></tr><tr><td data-num="26"></td><td><pre>m_obj</pre></td></tr><tr><td data-num="27"></td><td><pre>An object of class Seurat </pre></td></tr><tr><td data-num="28"></td><td><pre>14006 features across 180 samples within 1 assay </pre></td></tr><tr><td data-num="29"></td><td><pre>Active assay: SCT (14006 features, 0 variable features)</pre></td></tr></table></figure><p>这里需要注意，一般空间分析推荐使用的是 MetaspotsByGroups 函数，我尝试了一遍 softpower 只有 1，module 只有两个，所以又使用了 MetacellsByGroups 函数尝试。</p>
+<h2 id="共表达网络分析"><a class="anchor" href="#共表达网络分析">#</a> 共表达网络分析</h2>
+<figure class="highlight raw"><figcaption data-lang><span>w</span></figcaption><table><tr><td data-num="1"></td><td><pre># set up the expression matrix, set group.by and group_name to NULL to include all spots</pre></td></tr><tr><td data-num="2"></td><td><pre>subdata  &lt;- SetDatExpr(</pre></td></tr><tr><td data-num="3"></td><td><pre>  subdata,</pre></td></tr><tr><td data-num="4"></td><td><pre>  group.by&#x3D;NULL,</pre></td></tr><tr><td data-num="5"></td><td><pre>  group_name &#x3D; NULL</pre></td></tr><tr><td data-num="6"></td><td><pre>)</pre></td></tr><tr><td data-num="7"></td><td><pre></pre></td></tr><tr><td data-num="8"></td><td><pre># test different soft power thresholds</pre></td></tr><tr><td data-num="9"></td><td><pre>subdata &lt;- TestSoftPowers(subdata)</pre></td></tr><tr><td data-num="10"></td><td><pre>plot_list &lt;- PlotSoftPowers(subdata)</pre></td></tr><tr><td data-num="11"></td><td><pre></pre></td></tr><tr><td data-num="12"></td><td><pre>wrap_plots(plot_list, ncol&#x3D;2)</pre></td></tr></table></figure><p><img data-src="/img/posts/2023.7.7/2.png" alt="softpowers"></p>
+<pre><code># construct co-expression network:
+subdata &lt;- ConstructNetwork(
+  subdata,
+  soft_power = 1,
+  tom_name='test',
+  overwrite_tom=TRUE
+)
+
+# plot the dendrogram
+PlotDendrogram(subdata, main='Spatial hdWGCNA dendrogram')
+</code></pre>
+<p><img data-src="/img/posts/2023.7.7/3.png" alt="dendrogram"></p>
+<h2 id="compute-module-eigengenes"><a class="anchor" href="#compute-module-eigengenes">#</a> compute module eigengenes</h2>
+<figure class="highlight raw"><figcaption data-lang><span>w</span></figcaption><table><tr><td data-num="1"></td><td><pre>subdata &lt;- ModuleEigengenes(subdata)</pre></td></tr><tr><td data-num="2"></td><td><pre>subdata &lt;- ModuleConnectivity(subdata)</pre></td></tr><tr><td data-num="3"></td><td><pre></pre></td></tr><tr><td data-num="4"></td><td><pre>modules &lt;- GetModules(subdata) %&gt;% subset(module !&#x3D; &#39;grey&#39;)</pre></td></tr><tr><td data-num="5"></td><td><pre>head(modules[,1:3])</pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>              gene_name    module     color</pre></td></tr><tr><td data-num="8"></td><td><pre>PAXXG297280 PAXXG297280 turquoise turquoise</pre></td></tr><tr><td data-num="9"></td><td><pre>PAXXG074500 PAXXG074500      blue      blue</pre></td></tr><tr><td data-num="10"></td><td><pre>PAXXG239080 PAXXG239080 turquoise turquoise</pre></td></tr><tr><td data-num="11"></td><td><pre>PAXXG067750 PAXXG067750 turquoise turquoise</pre></td></tr><tr><td data-num="12"></td><td><pre>PAXXG327430 PAXXG327430 turquoise turquoise</pre></td></tr><tr><td data-num="13"></td><td><pre>PAXXG311150 PAXXG311150      blue      blue</pre></td></tr></table></figure><p>模块数目比较少也是正常的</p>
+<h2 id="data-visualization"><a class="anchor" href="#data-visualization">#</a> Data visualization</h2>
+<figure class="highlight raw"><figcaption data-lang><span>w</span></figcaption><table><tr><td data-num="1"></td><td><pre>tom&lt;-GetTOM(subdata)</pre></td></tr><tr><td data-num="2"></td><td><pre>##Data visualization</pre></td></tr><tr><td data-num="3"></td><td><pre>##Here we visualize module eigengenes using the Seurat functions DotPlot and SpatialFeaturePlot. </pre></td></tr><tr><td data-num="4"></td><td><pre>##For network visualization, please refer to the Network visualization tutorial.</pre></td></tr><tr><td data-num="5"></td><td><pre># get module eigengenes and gene-module assignment tables</pre></td></tr><tr><td data-num="6"></td><td><pre>MEs &lt;- GetMEs(subdata)</pre></td></tr><tr><td data-num="7"></td><td><pre>modules &lt;- GetModules(subdata)</pre></td></tr><tr><td data-num="8"></td><td><pre>mods &lt;- levels(modules$module)</pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre>write.table(file&#x3D;&quot;modules.xls&quot;,modules,row.names &#x3D; F,sep&#x3D;&quot;\t&quot;)</pre></td></tr><tr><td data-num="11"></td><td><pre># plot with Seurat&#39;s DotPlot function</pre></td></tr><tr><td data-num="12"></td><td><pre>p &lt;- DotPlot(subdata, features&#x3D;mods, group.by &#x3D; &#39;seurat_clusters&#39;, dot.min&#x3D;0.1)</pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre># flip the x&#x2F;y axes, rotate the axis labels, and change color scheme:</pre></td></tr><tr><td data-num="15"></td><td><pre>p &lt;- p +</pre></td></tr><tr><td data-num="16"></td><td><pre>  coord_flip() +</pre></td></tr><tr><td data-num="17"></td><td><pre>  RotatedAxis() +</pre></td></tr><tr><td data-num="18"></td><td><pre>  scale_color_gradient2(high&#x3D;&#39;red&#39;, mid&#x3D;&#39;grey95&#39;, low&#x3D;&#39;blue&#39;) +</pre></td></tr><tr><td data-num="19"></td><td><pre>  xlab(&#39;&#39;) + ylab(&#39;&#39;)</pre></td></tr><tr><td data-num="20"></td><td><pre></pre></td></tr><tr><td data-num="21"></td><td><pre>p</pre></td></tr><tr><td data-num="22"></td><td><pre></pre></td></tr><tr><td data-num="23"></td><td><pre></pre></td></tr><tr><td data-num="24"></td><td><pre></pre></td></tr><tr><td data-num="25"></td><td><pre>p &lt;- SpatialFeaturePlot(</pre></td></tr><tr><td data-num="26"></td><td><pre>  subdata,</pre></td></tr><tr><td data-num="27"></td><td><pre>  features &#x3D; mods,</pre></td></tr><tr><td data-num="28"></td><td><pre>  ncol &#x3D; 4,</pre></td></tr><tr><td data-num="29"></td><td><pre>  pt.size.factor &#x3D; 3.5</pre></td></tr><tr><td data-num="30"></td><td><pre>)</pre></td></tr><tr><td data-num="31"></td><td><pre></pre></td></tr><tr><td data-num="32"></td><td><pre>p</pre></td></tr></table></figure><p><img data-src="/img/posts/2023.7.7/4.png" alt title="dot"><br>
+<img data-src="/img/posts/2023.7.7/5.png" alt title="Feature"><br>
+{.gallery data-height=&quot;300&quot;}<br>
+ 分别用两种方法展示</p>
+<h2 id="module-network-plots"><a class="anchor" href="#module-network-plots">#</a> module network plots</h2>
+<p>分为两种，一种每个模块的 hubgene，一种是全部模块的 hubgene</p>
+<figure class="highlight raw"><figcaption data-lang><span>w</span></figcaption><table><tr><td data-num="1"></td><td><pre>## Individual module network plots</pre></td></tr><tr><td data-num="2"></td><td><pre>ModuleNetworkPlot(subdata,</pre></td></tr><tr><td data-num="3"></td><td><pre>                  plot_size &#x3D; c(10, 10),</pre></td></tr><tr><td data-num="4"></td><td><pre>                  vertex.label.cex &#x3D; 0.6</pre></td></tr><tr><td data-num="5"></td><td><pre>                  )</pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>hub_df &lt;- GetHubGenes(subdata, n_hubs &#x3D; 25)</pre></td></tr><tr><td data-num="8"></td><td><pre>write.table(file&#x3D;&quot;hub_df.xls&quot;,hub_df,row.names &#x3D; F,sep&#x3D;&quot;\t&quot;)</pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre>## hubgene network</pre></td></tr><tr><td data-num="11"></td><td><pre></pre></td></tr><tr><td data-num="12"></td><td><pre></pre></td></tr><tr><td data-num="13"></td><td><pre>HubGeneNetworkPlot(</pre></td></tr><tr><td data-num="14"></td><td><pre>  subdata,</pre></td></tr><tr><td data-num="15"></td><td><pre>  n_hubs &#x3D; 4, n_other&#x3D;6,</pre></td></tr><tr><td data-num="16"></td><td><pre>  edge_prop &#x3D; 0.75,</pre></td></tr><tr><td data-num="17"></td><td><pre>  mods &#x3D; &#39;all&#39;,</pre></td></tr><tr><td data-num="18"></td><td><pre>  hub.vertex.size &#x3D; 4,</pre></td></tr><tr><td data-num="19"></td><td><pre>  other.vertex.size &#x3D; 1,</pre></td></tr><tr><td data-num="20"></td><td><pre>  edge.alpha &#x3D; 0.5</pre></td></tr><tr><td data-num="21"></td><td><pre>)</pre></td></tr></table></figure><p class="gallery" data-height="500"><img data-src="/img/posts/2023.7.7/6.png" alt title="Blue"><br>
+<img data-src="/img/posts/2023.7.7/7.png" alt title="All"></p>
+<h2 id="总结"><a class="anchor" href="#总结">#</a> 总结</h2>
+<p>目前只是初步上手，其实这个方法主要的目的还是根据表达对基因进行聚类，再加个功能富集可能会更好，后续还有 UMAP to co-expression networks 流程，但因为我在做的时候效果比较差所以没放。</p>
+]]></content>
+      <categories>
+        <category>生信学习</category>
+        <category>单细胞</category>
+        <category>空间转录组</category>
+      </categories>
+      <tags>
+        <tag>bioinformatics</tag>
+        <tag>spatial_transcriptome</tag>
+        <tag>hdWGCNA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>AIbookmark</title>
     <url>/AIbookmark/index.html</url>
     <content><![CDATA[]]></content>
@@ -5632,7 +5684,7 @@ genes 文件里面包含的就是聚类特异基因，map 文件就是聚类信�
 <h3 id="解压密码前天是小兔子昨天是小鹿今天是你"><a class="anchor" href="#解压密码前天是小兔子昨天是小鹿今天是你">#</a> 解压密码：前天是小兔子，昨天是小鹿，今天是你</h3>
 <p>标点符号为中文</p>
 <h1 id="图包"><a class="anchor" href="#图包">#</a> 图包</h1>
-<h2 id="链接在这所有图包链接在这目前更新的图包见下图"><a class="anchor" href="#链接在这所有图包链接在这目前更新的图包见下图">#</a> 链接在这→<span class="exturl" data-url="aHR0cHM6Ly9raWIyMDIyLnNoYXJlcG9pbnQuY29tLzpmOi9nL0VsMlpKdEdVTEpsUHNITHU4Rko4dGNjQmVBNDYtWHF6OVFKekNCQjFTTVVNRXc/ZT16N002MHk=">所有图包</span>←链接在这，目前更新的图包见下图</h2>
+<h2 id="链接在这所有图包链接在这目前更新的图包见下图"><a class="anchor" href="#链接在这所有图包链接在这目前更新的图包见下图">#</a> 链接在这→<span class="exturl" data-url="aHR0cHM6Ly9raWIyMDIyLnNoYXJlcG9pbnQuY29tLzpmOi9nL0VsMlpKdEdVTEpsUHNITHU4Rko4dGNjQmVBNDYtWHF6OVFKekNCQjFTTVVNRXc/ZT05WGFHTzE=">所有图包</span>←链接在这，目前更新的图包见下图</h2>
 <p>链接炸了请及时留言反馈<br>
 鼠标悬停到相应图片即可查看名称</p>
 <h3 id="目前已上传"><a class="anchor" href="#目前已上传">#</a> 目前已上传</h3>
@@ -5669,6 +5721,14 @@ genes 文件里面包含的就是聚类特异基因，map 文件就是聚类信�
 <li>国风汉服</li>
 <li>旗袍</li>
 <li>学生服</li>
+<li>中国校服</li>
+<li>民国校服</li>
+<li>毛衣围巾</li>
+<li>苗装</li>
+<li>水手服</li>
+<li>职业服</li>
+<li>女仆装</li>
+<li>护士服</li>
 </ul>
 </div></details>
 <p><span class="label danger">竖版</span></p>
@@ -5690,7 +5750,15 @@ genes 文件里面包含的就是聚类特异基因，map 文件就是聚类信�
 <img data-src="/img/posts/AIfile/%E5%A4%9C%E5%85%B0.png" alt title="夜兰"><br>
 <img data-src="/img/posts/AIfile/%E6%B1%89%E6%9C%8D.png" alt title="汉服"><br>
 <img data-src="/img/posts/AIfile/%E6%97%97%E8%A2%8D.png" alt title="旗袍"><br>
-<img data-src="/img/posts/AIfile/%E5%AD%A6%E7%94%9F%E6%9C%8D.png" alt title="学生服"></p>
+<img data-src="/img/posts/AIfile/%E5%AD%A6%E7%94%9F%E6%9C%8D.png" alt title="学生服"><br>
+<img data-src="/img/posts/AIfile/%E4%B8%AD%E5%9B%BD%E6%A0%A1%E6%9C%8D.png" alt title="中国校服"><br>
+<img data-src="/img/posts/AIfile/%E6%B0%91%E5%9B%BD%E6%A0%A1%E6%9C%8D.png" alt title="民国校服"><br>
+<img data-src="/img/posts/AIfile/%E6%AF%9B%E8%A1%A3%E5%9B%B4%E5%B7%BE.png" alt title="毛衣围巾"><br>
+<img data-src="/img/posts/AIfile/%E8%8B%97%E8%A3%85.png" alt title="苗装"><br>
+<img data-src="/img/posts/AIfile/%E6%B0%B4%E6%89%8B%E6%9C%8D.png" alt title="水手服"><br>
+<img data-src="/img/posts/AIfile/%E8%81%8C%E4%B8%9A%E6%9C%8D.png" alt title="职业服"><br>
+<img data-src="/img/posts/AIfile/%E5%A5%B3%E4%BB%86%E8%A3%85.png" alt title="女仆装"><br>
+<img data-src="/img/posts/AIfile/%E6%8A%A4%E5%A3%AB%E6%9C%8D.png" alt title="护士服"></p>
 <p><span class="label danger">横版</span></p>
 <p class="gallery" data-height="180"><img data-src="/img/posts/AIfile/%E7%8F%8A%E7%91%9A%E5%AE%AB%E5%BF%83%E6%B5%B7.png" alt title="珊瑚宫心海"></p>
 <h1 id="废话"><a class="anchor" href="#废话">#</a> 废话</h1>
